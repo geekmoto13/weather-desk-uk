@@ -289,3 +289,9 @@ A collaboration between Shannon (KC1OHT) and Robert (KA6RTL).
 Third-party notices are in [`third-party/`](third-party/).
 
 Released under the MIT License. See [`LICENSE`](LICENSE).
+
+## Support
+
+Questions and bug reports are welcome as GitHub issues on this repository.
+This is a hobby project maintained on a best-effort basis, so replies may
+take a few days. Please include your edition, how you run it (Windows, Docker

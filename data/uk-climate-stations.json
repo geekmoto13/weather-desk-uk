@@ -1,0 +1,1403 @@
+{
+  "schema_version": 1,
+  "audited_on": "2026-10-24",
+  "default_station_id": "UKE00105906",
+  "dataset": {
+    "name": "NOAA GHCN-Daily",
+    "version": "The current version of GHCN Daily is 3.35-upd-2026102217 (i.e, an update that started at 2026102217 [yyyymmddhh] UTC; yyyy=year; mm=month; dd=day; hh=hour),\ncreated by appending recently available data updates to the last fully reprocessed version: 3.35-por-2026101623.",
+    "metadata_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt",
+    "inventory_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-inventory.txt",
+    "documentation_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/readme.txt",
+    "dataset_url": "https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily",
+    "doi": "https://doi.org/10.7289/V5D21VHZ",
+    "licence_evidence_url": "https://registry.opendata.aws/noaa-ghcn/",
+    "licence_evidence_note": "NOAA-managed NODD GHCN-D entry, linked from https://www.noaa.gov/nodd/datasets, states CC0-1.0. NCEI dataset metadata requests citation and makes no warranty.",
+    "citation": "Menne et al. (2012), Global Historical Climatology Network - Daily (GHCN-Daily), Version 3.35, UK station subset. NOAA National Climatic Data Center. https://doi.org/10.7289/V5D21VHZ. Accessed 2026-10-24.",
+    "calculation_attribution": "Calculated from NOAA NCEI GHCN-Daily observations; source E denotes ECA&D. These calculated references and source-record comparisons are not official Met Office normals or certified records.",
+    "format": "fixed-width ASCII .dly; one element-month per row; 31 eight-character value/measurement/quality/source groups",
+    "units": {
+      "TMAX": "0.1 degrees Celsius",
+      "TMIN": "0.1 degrees Celsius",
+      "PRCP": "0.1 millimetres"
+    },
+    "missing_value": -9999,
+    "audit_acceptance": "Numeric value is not -9999 and QFLAG is blank. Measurement and source flags are preserved; this is not homogenization."
+  },
+  "baseline": {
+    "start_year": 1991,
+    "end_year": 2020,
+    "label": "Calculated 1991\u20132020 daily reference",
+    "method": "Arithmetic mean by month/day over accepted source observations; not a published Met Office or NOAA normal.",
+    "min_years_ordinary": 24,
+    "available_years_ordinary": 30,
+    "min_years_feb29": 7,
+    "available_years_feb29": 8,
+    "eligible_station_rule": "All 366 calendar dates pass the threshold for TMAX, TMIN and PRCP, and all fields have accepted observations in 2025 or later."
+  },
+  "monthly_comparison": {
+    "provider": "Met Office",
+    "station": "Sutton Bonington",
+    "url": "https://www.metoffice.gov.uk/pub/data/weather/uk/climate/stationdata/suttonboningtondata.txt",
+    "period": "1959-01 through 2026-09 in downloaded file; rain is missing in initial years",
+    "lat": 52.833,
+    "lon": -1.25,
+    "elevation_m": 48,
+    "format": "Whitespace TXT with metadata header; yyyy mm tmax tmin af rain sun; values may end in * or #; provisional marker follows row.",
+    "units": {
+      "tmax": "degrees Celsius",
+      "tmin": "degrees Celsius",
+      "af": "days",
+      "rain": "millimetres",
+      "sun": "hours"
+    },
+    "missing": "---",
+    "estimated_suffix": "*",
+    "automated_sunshine_suffix": "#",
+    "licence_url": "https://www.data.gov.uk/dataset/17ba3bbe-0e98-4a8c-9937-bd1d50fdc3c5/historical-monthly-data-for-meteorological-stations",
+    "attribution": "Met Office. Contains public sector information licensed under the Open Government Licence v3.0."
+  },
+  "stations": [
+    {
+      "id": "UKE00105906",
+      "name": "NOTTINGHAM: WATNALL",
+      "lat": 53.005,
+      "lon": -1.25,
+      "elevation_m": 117.0,
+      "region": "Nottinghamshire, England",
+      "daily_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/UKE00105906.dly",
+      "inventory": {
+        "TMAX": {
+          "first_year": 1959,
+          "last_year": 2026
+        },
+        "TMIN": {
+          "first_year": 1960,
+          "last_year": 2026
+        },
+        "PRCP": {
+          "first_year": 1960,
+          "last_year": 2026
+        }
+      },
+      "audit": {
+        "TMAX": {
+          "first_valid": "1959-12-31",
+          "latest_valid": "2026-09-29",
+          "baseline_valid": 10714,
+          "baseline_pct": 97.77,
+          "min_years_ordinary": 26,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10714
+          },
+          "quality_flagged_all_period": 431,
+          "trace_count_all_period": 0
+        },
+        "TMIN": {
+          "first_valid": "1960-01-02",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10655,
+          "baseline_pct": 97.23,
+          "min_years_ordinary": 24,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10655
+          },
+          "quality_flagged_all_period": 448,
+          "trace_count_all_period": 0
+        },
+        "PRCP": {
+          "first_valid": "1960-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10768,
+          "baseline_pct": 98.27,
+          "min_years_ordinary": 27,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10768
+          },
+          "quality_flagged_all_period": 0,
+          "trace_count_all_period": 0
+        }
+      },
+      "baseline_pass": true
+    },
+    {
+      "id": "UKE00105866",
+      "name": "ABERPORTH",
+      "lat": 52.1389,
+      "lon": -4.5717,
+      "elevation_m": 133.0,
+      "region": "Ceredigion, Wales",
+      "daily_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/UKE00105866.dly",
+      "inventory": {
+        "TMAX": {
+          "first_year": 1959,
+          "last_year": 2026
+        },
+        "TMIN": {
+          "first_year": 1960,
+          "last_year": 2026
+        },
+        "PRCP": {
+          "first_year": 1960,
+          "last_year": 2026
+        }
+      },
+      "audit": {
+        "TMAX": {
+          "first_valid": "1959-12-31",
+          "latest_valid": "2026-09-29",
+          "baseline_valid": 10734,
+          "baseline_pct": 97.96,
+          "min_years_ordinary": 25,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10734
+          },
+          "quality_flagged_all_period": 521,
+          "trace_count_all_period": 0
+        },
+        "TMIN": {
+          "first_valid": "1960-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10720,
+          "baseline_pct": 97.83,
+          "min_years_ordinary": 25,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10720
+          },
+          "quality_flagged_all_period": 522,
+          "trace_count_all_period": 0
+        },
+        "PRCP": {
+          "first_valid": "1960-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10945,
+          "baseline_pct": 99.88,
+          "min_years_ordinary": 28,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10945
+          },
+          "quality_flagged_all_period": 0,
+          "trace_count_all_period": 0
+        }
+      },
+      "baseline_pass": true
+    },
+    {
+      "id": "UK000047811",
+      "name": "ARMAGH",
+      "lat": 54.35,
+      "lon": -6.65,
+      "elevation_m": 62.0,
+      "region": "County Armagh, Northern Ireland",
+      "daily_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/UK000047811.dly",
+      "inventory": {
+        "TMAX": {
+          "first_year": 1844,
+          "last_year": 2026
+        },
+        "TMIN": {
+          "first_year": 1844,
+          "last_year": 2026
+        },
+        "PRCP": {
+          "first_year": 1838,
+          "last_year": 2026
+        }
+      },
+      "audit": {
+        "TMAX": {
+          "first_valid": "1844-01-01",
+          "latest_valid": "2026-09-29",
+          "baseline_valid": 10789,
+          "baseline_pct": 98.46,
+          "min_years_ordinary": 27,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10788,
+            "I": 1
+          },
+          "quality_flagged_all_period": 310,
+          "trace_count_all_period": 0
+        },
+        "TMIN": {
+          "first_valid": "1844-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10783,
+          "baseline_pct": 98.4,
+          "min_years_ordinary": 26,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10783
+          },
+          "quality_flagged_all_period": 316,
+          "trace_count_all_period": 0
+        },
+        "PRCP": {
+          "first_valid": "1838-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10863,
+          "baseline_pct": 99.13,
+          "min_years_ordinary": 28,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10863
+          },
+          "quality_flagged_all_period": 76,
+          "trace_count_all_period": 0
+        }
+      },
+      "baseline_pass": true
+    },
+    {
+      "id": "UKE00105903",
+      "name": "BRADFORD",
+      "lat": 53.8131,
+      "lon": -1.7739,
+      "elevation_m": 134.0,
+      "region": "West Yorkshire, England",
+      "daily_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/UKE00105903.dly",
+      "inventory": {
+        "TMAX": {
+          "first_year": 1910,
+          "last_year": 2026
+        },
+        "TMIN": {
+          "first_year": 1911,
+          "last_year": 2026
+        },
+        "PRCP": {
+          "first_year": 1911,
+          "last_year": 2026
+        }
+      },
+      "audit": {
+        "TMAX": {
+          "first_valid": "1910-12-31",
+          "latest_valid": "2026-09-29",
+          "baseline_valid": 10608,
+          "baseline_pct": 96.81,
+          "min_years_ordinary": 25,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10608
+          },
+          "quality_flagged_all_period": 893,
+          "trace_count_all_period": 0
+        },
+        "TMIN": {
+          "first_valid": "1911-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10678,
+          "baseline_pct": 97.44,
+          "min_years_ordinary": 25,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10678
+          },
+          "quality_flagged_all_period": 959,
+          "trace_count_all_period": 0
+        },
+        "PRCP": {
+          "first_valid": "1911-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10958,
+          "baseline_pct": 100.0,
+          "min_years_ordinary": 30,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10958
+          },
+          "quality_flagged_all_period": 0,
+          "trace_count_all_period": 0
+        }
+      },
+      "baseline_pass": true
+    },
+    {
+      "id": "UK000003808",
+      "name": "CAMBORNE",
+      "lat": 50.2167,
+      "lon": -5.3167,
+      "elevation_m": 88.0,
+      "region": "Cornwall, England",
+      "daily_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/UK000003808.dly",
+      "inventory": {
+        "TMAX": {
+          "first_year": 1978,
+          "last_year": 2026
+        },
+        "TMIN": {
+          "first_year": 1973,
+          "last_year": 2026
+        },
+        "PRCP": {
+          "first_year": 1978,
+          "last_year": 2026
+        }
+      },
+      "audit": {
+        "TMAX": {
+          "first_valid": "1978-09-01",
+          "latest_valid": "2026-10-17",
+          "baseline_valid": 10842,
+          "baseline_pct": 98.94,
+          "min_years_ordinary": 26,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "G": 3619,
+            "E": 7223
+          },
+          "quality_flagged_all_period": 181,
+          "trace_count_all_period": 0
+        },
+        "TMIN": {
+          "first_valid": "1973-02-05",
+          "latest_valid": "2026-10-17",
+          "baseline_valid": 10836,
+          "baseline_pct": 98.89,
+          "min_years_ordinary": 25,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "G": 3622,
+            "E": 7214
+          },
+          "quality_flagged_all_period": 188,
+          "trace_count_all_period": 0
+        },
+        "PRCP": {
+          "first_valid": "1978-09-01",
+          "latest_valid": "2026-10-18",
+          "baseline_valid": 10366,
+          "baseline_pct": 94.6,
+          "min_years_ordinary": 25,
+          "feb29_years": 7,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "S": 1205,
+            "I": 1856,
+            "E": 7305
+          },
+          "quality_flagged_all_period": 0,
+          "trace_count_all_period": 0
+        }
+      },
+      "baseline_pass": true
+    },
+    {
+      "id": "UKE00105881",
+      "name": "DYCE",
+      "lat": 57.205,
+      "lon": -2.2039,
+      "elevation_m": 65.0,
+      "region": "Aberdeen, Scotland",
+      "daily_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/UKE00105881.dly",
+      "inventory": {
+        "TMAX": {
+          "first_year": 1959,
+          "last_year": 2026
+        },
+        "TMIN": {
+          "first_year": 1960,
+          "last_year": 2026
+        },
+        "PRCP": {
+          "first_year": 1960,
+          "last_year": 2026
+        }
+      },
+      "audit": {
+        "TMAX": {
+          "first_valid": "1959-12-31",
+          "latest_valid": "2026-09-29",
+          "baseline_valid": 10774,
+          "baseline_pct": 98.32,
+          "min_years_ordinary": 26,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10774
+          },
+          "quality_flagged_all_period": 359,
+          "trace_count_all_period": 0
+        },
+        "TMIN": {
+          "first_valid": "1960-01-02",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10767,
+          "baseline_pct": 98.26,
+          "min_years_ordinary": 26,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10767
+          },
+          "quality_flagged_all_period": 369,
+          "trace_count_all_period": 0
+        },
+        "PRCP": {
+          "first_valid": "1960-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10943,
+          "baseline_pct": 99.86,
+          "min_years_ordinary": 29,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10943
+          },
+          "quality_flagged_all_period": 0,
+          "trace_count_all_period": 0
+        }
+      },
+      "baseline_pass": true
+    },
+    {
+      "id": "UKE00105888",
+      "name": "EDINBURGH: ROYAL BOTANIC GARDE",
+      "lat": 55.9667,
+      "lon": -3.21,
+      "elevation_m": 26.0,
+      "region": "Edinburgh, Scotland",
+      "daily_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/UKE00105888.dly",
+      "inventory": {
+        "TMAX": {
+          "first_year": 1959,
+          "last_year": 2026
+        },
+        "TMIN": {
+          "first_year": 1960,
+          "last_year": 2026
+        },
+        "PRCP": {
+          "first_year": 1961,
+          "last_year": 2026
+        }
+      },
+      "audit": {
+        "TMAX": {
+          "first_valid": "1959-12-31",
+          "latest_valid": "2026-09-29",
+          "baseline_valid": 10716,
+          "baseline_pct": 97.79,
+          "min_years_ordinary": 24,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10716
+          },
+          "quality_flagged_all_period": 416,
+          "trace_count_all_period": 0
+        },
+        "TMIN": {
+          "first_valid": "1960-01-02",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10749,
+          "baseline_pct": 98.09,
+          "min_years_ordinary": 25,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10749
+          },
+          "quality_flagged_all_period": 437,
+          "trace_count_all_period": 0
+        },
+        "PRCP": {
+          "first_valid": "1961-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10958,
+          "baseline_pct": 100.0,
+          "min_years_ordinary": 30,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10958
+          },
+          "quality_flagged_all_period": 0,
+          "trace_count_all_period": 0
+        }
+      },
+      "baseline_pass": true
+    },
+    {
+      "id": "UK000003162",
+      "name": "ESKDALEMUIR",
+      "lat": 55.3167,
+      "lon": -3.2,
+      "elevation_m": 242.0,
+      "region": "Dumfries and Galloway, Scotland",
+      "daily_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/UK000003162.dly",
+      "inventory": {
+        "TMAX": {
+          "first_year": 1953,
+          "last_year": 2026
+        },
+        "TMIN": {
+          "first_year": 1954,
+          "last_year": 2026
+        },
+        "PRCP": {
+          "first_year": 1931,
+          "last_year": 2026
+        }
+      },
+      "audit": {
+        "TMAX": {
+          "first_valid": "1953-12-31",
+          "latest_valid": "2026-10-17",
+          "baseline_valid": 10429,
+          "baseline_pct": 95.17,
+          "min_years_ordinary": 25,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10429
+          },
+          "quality_flagged_all_period": 812,
+          "trace_count_all_period": 0
+        },
+        "TMIN": {
+          "first_valid": "1954-01-01",
+          "latest_valid": "2026-10-17",
+          "baseline_valid": 10392,
+          "baseline_pct": 94.83,
+          "min_years_ordinary": 25,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10392
+          },
+          "quality_flagged_all_period": 863,
+          "trace_count_all_period": 0
+        },
+        "PRCP": {
+          "first_valid": "1931-01-01",
+          "latest_valid": "2026-10-18",
+          "baseline_valid": 10950,
+          "baseline_pct": 99.93,
+          "min_years_ordinary": 29,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10950
+          },
+          "quality_flagged_all_period": 0,
+          "trace_count_all_period": 0
+        }
+      },
+      "baseline_pass": true
+    },
+    {
+      "id": "UKE00105910",
+      "name": "KEELE",
+      "lat": 52.9981,
+      "lon": -2.27,
+      "elevation_m": 179.0,
+      "region": "Staffordshire, England",
+      "daily_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/UKE00105910.dly",
+      "inventory": {
+        "TMAX": {
+          "first_year": 1959,
+          "last_year": 2026
+        },
+        "TMIN": {
+          "first_year": 1960,
+          "last_year": 2026
+        },
+        "PRCP": {
+          "first_year": 1961,
+          "last_year": 2026
+        }
+      },
+      "audit": {
+        "TMAX": {
+          "first_valid": "1959-12-31",
+          "latest_valid": "2026-09-29",
+          "baseline_valid": 10570,
+          "baseline_pct": 96.46,
+          "min_years_ordinary": 25,
+          "feb29_years": 7,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10570
+          },
+          "quality_flagged_all_period": 449,
+          "trace_count_all_period": 0
+        },
+        "TMIN": {
+          "first_valid": "1960-01-02",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10571,
+          "baseline_pct": 96.47,
+          "min_years_ordinary": 25,
+          "feb29_years": 7,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10571
+          },
+          "quality_flagged_all_period": 462,
+          "trace_count_all_period": 0
+        },
+        "PRCP": {
+          "first_valid": "1961-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10760,
+          "baseline_pct": 98.19,
+          "min_years_ordinary": 28,
+          "feb29_years": 7,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10760
+          },
+          "quality_flagged_all_period": 0,
+          "trace_count_all_period": 0
+        }
+      },
+      "baseline_pass": true
+    },
+    {
+      "id": "UK000003005",
+      "name": "LERWICK",
+      "lat": 60.1331,
+      "lon": -1.1831,
+      "elevation_m": 82.0,
+      "region": "Shetland, Scotland",
+      "daily_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/UK000003005.dly",
+      "inventory": {
+        "TMAX": {
+          "first_year": 1929,
+          "last_year": 2026
+        },
+        "TMIN": {
+          "first_year": 1929,
+          "last_year": 2026
+        },
+        "PRCP": {
+          "first_year": 1930,
+          "last_year": 2026
+        }
+      },
+      "audit": {
+        "TMAX": {
+          "first_valid": "1929-10-01",
+          "latest_valid": "2026-09-29",
+          "baseline_valid": 10763,
+          "baseline_pct": 98.22,
+          "min_years_ordinary": 25,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "G": 3614,
+            "E": 7149
+          },
+          "quality_flagged_all_period": 495,
+          "trace_count_all_period": 0
+        },
+        "TMIN": {
+          "first_valid": "1929-10-02",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10764,
+          "baseline_pct": 98.23,
+          "min_years_ordinary": 25,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "G": 3615,
+            "E": 7149
+          },
+          "quality_flagged_all_period": 497,
+          "trace_count_all_period": 0
+        },
+        "PRCP": {
+          "first_valid": "1930-12-12",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10958,
+          "baseline_pct": 100.0,
+          "min_years_ordinary": 30,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "I": 3653,
+            "E": 7305
+          },
+          "quality_flagged_all_period": 0,
+          "trace_count_all_period": 0
+        }
+      },
+      "baseline_pass": true
+    },
+    {
+      "id": "UK000056225",
+      "name": "OXFORD",
+      "lat": 51.7667,
+      "lon": -1.2667,
+      "elevation_m": 63.0,
+      "region": "Oxfordshire, England",
+      "daily_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/UK000056225.dly",
+      "inventory": {
+        "TMAX": {
+          "first_year": 1814,
+          "last_year": 2026
+        },
+        "TMIN": {
+          "first_year": 1815,
+          "last_year": 2026
+        },
+        "PRCP": {
+          "first_year": 1827,
+          "last_year": 2026
+        }
+      },
+      "audit": {
+        "TMAX": {
+          "first_valid": "1814-12-31",
+          "latest_valid": "2026-09-27",
+          "baseline_valid": 10788,
+          "baseline_pct": 98.45,
+          "min_years_ordinary": 26,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10788
+          },
+          "quality_flagged_all_period": 1258,
+          "trace_count_all_period": 0
+        },
+        "TMIN": {
+          "first_valid": "1815-01-01",
+          "latest_valid": "2026-09-29",
+          "baseline_valid": 10749,
+          "baseline_pct": 98.09,
+          "min_years_ordinary": 25,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10749
+          },
+          "quality_flagged_all_period": 1320,
+          "trace_count_all_period": 0
+        },
+        "PRCP": {
+          "first_valid": "1827-01-01",
+          "latest_valid": "2026-09-29",
+          "baseline_valid": 10958,
+          "baseline_pct": 100.0,
+          "min_years_ordinary": 30,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10958
+          },
+          "quality_flagged_all_period": 0,
+          "trace_count_all_period": 0
+        }
+      },
+      "baseline_pass": true
+    },
+    {
+      "id": "UKE00105904",
+      "name": "SHEFFIELD",
+      "lat": 53.3808,
+      "lon": -1.49,
+      "elevation_m": 131.0,
+      "region": "South Yorkshire, England",
+      "daily_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/UKE00105904.dly",
+      "inventory": {
+        "TMAX": {
+          "first_year": 1882,
+          "last_year": 2026
+        },
+        "TMIN": {
+          "first_year": 1883,
+          "last_year": 2026
+        },
+        "PRCP": {
+          "first_year": 1883,
+          "last_year": 2026
+        }
+      },
+      "audit": {
+        "TMAX": {
+          "first_valid": "1882-12-31",
+          "latest_valid": "2026-09-29",
+          "baseline_valid": 10681,
+          "baseline_pct": 97.47,
+          "min_years_ordinary": 25,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10681
+          },
+          "quality_flagged_all_period": 1061,
+          "trace_count_all_period": 0
+        },
+        "TMIN": {
+          "first_valid": "1883-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10657,
+          "baseline_pct": 97.25,
+          "min_years_ordinary": 24,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10657
+          },
+          "quality_flagged_all_period": 1082,
+          "trace_count_all_period": 0
+        },
+        "PRCP": {
+          "first_valid": "1883-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10928,
+          "baseline_pct": 99.73,
+          "min_years_ordinary": 29,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10928
+          },
+          "quality_flagged_all_period": 0,
+          "trace_count_all_period": 0
+        }
+      },
+      "baseline_pass": true
+    },
+    {
+      "id": "UKE00105877",
+      "name": "STORMONT CASTLE",
+      "lat": 54.6031,
+      "lon": -5.8289,
+      "elevation_m": 56.0,
+      "region": "County Down, Northern Ireland",
+      "daily_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/UKE00105877.dly",
+      "inventory": {
+        "TMAX": {
+          "first_year": 1959,
+          "last_year": 2026
+        },
+        "TMIN": {
+          "first_year": 1960,
+          "last_year": 2026
+        },
+        "PRCP": {
+          "first_year": 1961,
+          "last_year": 2026
+        }
+      },
+      "audit": {
+        "TMAX": {
+          "first_valid": "1959-12-31",
+          "latest_valid": "2026-09-29",
+          "baseline_valid": 10500,
+          "baseline_pct": 95.82,
+          "min_years_ordinary": 25,
+          "feb29_years": 7,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10500
+          },
+          "quality_flagged_all_period": 271,
+          "trace_count_all_period": 0
+        },
+        "TMIN": {
+          "first_valid": "1960-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10463,
+          "baseline_pct": 95.48,
+          "min_years_ordinary": 24,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10463
+          },
+          "quality_flagged_all_period": 284,
+          "trace_count_all_period": 0
+        },
+        "PRCP": {
+          "first_valid": "1961-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10669,
+          "baseline_pct": 97.36,
+          "min_years_ordinary": 28,
+          "feb29_years": 7,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10669
+          },
+          "quality_flagged_all_period": 0,
+          "trace_count_all_period": 0
+        }
+      },
+      "baseline_pass": true
+    },
+    {
+      "id": "UK000003302",
+      "name": "VALLEY",
+      "lat": 53.25,
+      "lon": -4.5331,
+      "elevation_m": 11.0,
+      "region": "Anglesey, Wales",
+      "daily_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/UK000003302.dly",
+      "inventory": {
+        "TMAX": {
+          "first_year": 1930,
+          "last_year": 2026
+        },
+        "TMIN": {
+          "first_year": 1930,
+          "last_year": 2026
+        },
+        "PRCP": {
+          "first_year": 1973,
+          "last_year": 2026
+        }
+      },
+      "audit": {
+        "TMAX": {
+          "first_valid": "1930-12-01",
+          "latest_valid": "2026-09-29",
+          "baseline_valid": 10738,
+          "baseline_pct": 97.99,
+          "min_years_ordinary": 25,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "G": 3623,
+            "E": 6842,
+            "S": 273
+          },
+          "quality_flagged_all_period": 333,
+          "trace_count_all_period": 0
+        },
+        "TMIN": {
+          "first_valid": "1930-12-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10667,
+          "baseline_pct": 97.34,
+          "min_years_ordinary": 26,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "G": 3625,
+            "E": 6840,
+            "S": 202
+          },
+          "quality_flagged_all_period": 312,
+          "trace_count_all_period": 0
+        },
+        "PRCP": {
+          "first_valid": "1973-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10355,
+          "baseline_pct": 94.5,
+          "min_years_ordinary": 25,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "S": 1559,
+            "I": 1856,
+            "E": 6940
+          },
+          "quality_flagged_all_period": 1,
+          "trace_count_all_period": 0
+        }
+      },
+      "baseline_pass": true
+    },
+    {
+      "id": "UK000070765",
+      "name": "WICK",
+      "lat": 58.45,
+      "lon": -3.0831,
+      "elevation_m": 36.0,
+      "region": "Caithness, Scotland",
+      "daily_url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/UK000070765.dly",
+      "inventory": {
+        "TMAX": {
+          "first_year": 1929,
+          "last_year": 2026
+        },
+        "TMIN": {
+          "first_year": 1929,
+          "last_year": 2026
+        },
+        "PRCP": {
+          "first_year": 1931,
+          "last_year": 2026
+        }
+      },
+      "audit": {
+        "TMAX": {
+          "first_valid": "1929-10-01",
+          "latest_valid": "2026-09-29",
+          "baseline_valid": 10595,
+          "baseline_pct": 96.69,
+          "min_years_ordinary": 25,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10395,
+            "I": 12,
+            "S": 188
+          },
+          "quality_flagged_all_period": 544,
+          "trace_count_all_period": 0
+        },
+        "TMIN": {
+          "first_valid": "1929-10-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10564,
+          "baseline_pct": 96.4,
+          "min_years_ordinary": 24,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10373,
+            "S": 191
+          },
+          "quality_flagged_all_period": 585,
+          "trace_count_all_period": 0
+        },
+        "PRCP": {
+          "first_valid": "1931-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_valid": 10829,
+          "baseline_pct": 98.82,
+          "min_years_ordinary": 28,
+          "feb29_years": 8,
+          "normal_dates_ok": 366,
+          "baseline_sources": {
+            "E": 10362,
+            "S": 467
+          },
+          "quality_flagged_all_period": 15,
+          "trace_count_all_period": 0
+        }
+      },
+      "baseline_pass": true
+    }
+  ],
+  "excluded_or_limited": [
+    {
+      "id": "UK000003026",
+      "name": "STORNOWAY AIRPORT",
+      "reason": "Reported latitude 58.3300 differs materially from Met Office Stornoway Airport 58.214; omitted pending station-location reconciliation."
+    },
+    {
+      "id": "UK000003377",
+      "name": "WADDINGTON",
+      "reason": "Reported longitude +0.5239 conflicts with Met Office Waddington longitude -0.522; omitted to prevent incorrect distance ranking."
+    },
+    {
+      "id": "UKE00105876",
+      "name": "HILLSBOROUGH",
+      "reason": "Fails 24/30 ordinary-date or 7/8 leap-date minimum for one or more elements.",
+      "audit": {
+        "TMAX": {
+          "first_valid": "1959-12-31",
+          "latest_valid": "2026-09-29",
+          "baseline_pct": 80.55,
+          "min_years_ordinary": 20,
+          "feb29_years": 6,
+          "normal_dates_ok": 293
+        },
+        "TMIN": {
+          "first_valid": "1960-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_pct": 80.51,
+          "min_years_ordinary": 20,
+          "feb29_years": 7,
+          "normal_dates_ok": 294
+        },
+        "PRCP": {
+          "first_valid": "1961-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_pct": 81.4,
+          "min_years_ordinary": 22,
+          "feb29_years": 7,
+          "normal_dates_ok": 335
+        }
+      }
+    },
+    {
+      "id": "UKE00105905",
+      "name": "BUXTON",
+      "reason": "Fails 24/30 ordinary-date or 7/8 leap-date minimum for one or more elements.",
+      "audit": {
+        "TMAX": {
+          "first_valid": "1874-12-31",
+          "latest_valid": "2026-09-29",
+          "baseline_pct": 86.69,
+          "min_years_ordinary": 21,
+          "feb29_years": 6,
+          "normal_dates_ok": 354
+        },
+        "TMIN": {
+          "first_valid": "1875-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_pct": 96.14,
+          "min_years_ordinary": 25,
+          "feb29_years": 7,
+          "normal_dates_ok": 366
+        },
+        "PRCP": {
+          "first_valid": "1875-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_pct": 98.35,
+          "min_years_ordinary": 29,
+          "feb29_years": 7,
+          "normal_dates_ok": 366
+        }
+      }
+    },
+    {
+      "id": "UKE00105908",
+      "name": "NEWTOWN LINFORD",
+      "reason": "Fails 24/30 ordinary-date or 7/8 leap-date minimum for one or more elements.",
+      "audit": {
+        "TMAX": {
+          "first_valid": "1959-12-31",
+          "latest_valid": "2002-12-28",
+          "baseline_pct": 39.48,
+          "min_years_ordinary": 8,
+          "feb29_years": 3,
+          "normal_dates_ok": 0
+        },
+        "TMIN": {
+          "first_valid": "1960-01-02",
+          "latest_valid": "2002-12-30",
+          "baseline_pct": 39.45,
+          "min_years_ordinary": 9,
+          "feb29_years": 3,
+          "normal_dates_ok": 0
+        },
+        "PRCP": {
+          "first_valid": "1961-01-01",
+          "latest_valid": "2004-12-31",
+          "baseline_pct": 46.67,
+          "min_years_ordinary": 14,
+          "feb29_years": 4,
+          "normal_dates_ok": 0
+        }
+      }
+    },
+    {
+      "id": "UKE00105909",
+      "name": "WELLESBOURNE",
+      "reason": "Fails 24/30 ordinary-date or 7/8 leap-date minimum for one or more elements.",
+      "audit": {
+        "TMAX": {
+          "first_valid": "1959-12-31",
+          "latest_valid": "2026-09-29",
+          "baseline_pct": 95.06,
+          "min_years_ordinary": 26,
+          "feb29_years": 8,
+          "normal_dates_ok": 366
+        },
+        "TMIN": {
+          "first_valid": "1960-01-02",
+          "latest_valid": "2026-09-30",
+          "baseline_pct": 94.84,
+          "min_years_ordinary": 23,
+          "feb29_years": 8,
+          "normal_dates_ok": 365
+        },
+        "PRCP": {
+          "first_valid": "1961-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_pct": 96.39,
+          "min_years_ordinary": 28,
+          "feb29_years": 8,
+          "normal_dates_ok": 366
+        }
+      }
+    },
+    {
+      "id": "UKE00107650",
+      "name": "HEATHROW",
+      "reason": "Reported longitude +0.4489 conflicts with Met Office Heathrow longitude -0.452; omitted to prevent incorrect distance ranking."
+    },
+    {
+      "id": "UKE00156852",
+      "name": "DURHAM",
+      "reason": "Fails 24/30 ordinary-date or 7/8 leap-date minimum for one or more elements.",
+      "audit": {
+        "TMAX": {
+          "first_valid": "1879-12-31",
+          "latest_valid": "2026-09-29",
+          "baseline_pct": 93.16,
+          "min_years_ordinary": 22,
+          "feb29_years": 8,
+          "normal_dates_ok": 365
+        },
+        "TMIN": {
+          "first_valid": "1880-01-02",
+          "latest_valid": "2026-09-30",
+          "baseline_pct": 93.01,
+          "min_years_ordinary": 23,
+          "feb29_years": 8,
+          "normal_dates_ok": 365
+        },
+        "PRCP": {
+          "first_valid": "1880-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_pct": 94.65,
+          "min_years_ordinary": 26,
+          "feb29_years": 8,
+          "normal_dates_ok": 366
+        }
+      }
+    },
+    {
+      "id": "UKE00156876",
+      "name": "SUTTON BONINGTON",
+      "reason": "Fails 24/30 ordinary-date or 7/8 leap-date minimum for one or more elements.",
+      "audit": {
+        "TMAX": {
+          "first_valid": "2012-12-31",
+          "latest_valid": "2026-09-29",
+          "baseline_pct": 26.13,
+          "min_years_ordinary": 6,
+          "feb29_years": 2,
+          "normal_dates_ok": 0
+        },
+        "TMIN": {
+          "first_valid": "2013-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_pct": 26.12,
+          "min_years_ordinary": 5,
+          "feb29_years": 2,
+          "normal_dates_ok": 0
+        },
+        "PRCP": {
+          "first_valid": "2013-01-01",
+          "latest_valid": "2026-09-30",
+          "baseline_pct": 26.67,
+          "min_years_ordinary": 8,
+          "feb29_years": 2,
+          "normal_dates_ok": 0
+        }
+      }
+    },
+    {
+      "id": "UKM00003414",
+      "name": "SHAWBURY",
+      "reason": "Fails 24/30 ordinary-date or 7/8 leap-date minimum for one or more elements.",
+      "audit": {
+        "TMAX": {
+          "first_valid": "1973-01-01",
+          "latest_valid": "2026-09-29",
+          "baseline_pct": 92.83,
+          "min_years_ordinary": 21,
+          "feb29_years": 8,
+          "normal_dates_ok": 349
+        },
+        "TMIN": {
+          "first_valid": "1973-01-02",
+          "latest_valid": "2026-09-30",
+          "baseline_pct": 86.25,
+          "min_years_ordinary": 19,
+          "feb29_years": 6,
+          "normal_dates_ok": 317
+        },
+        "PRCP": {
+          "first_valid": "1973-01-02",
+          "latest_valid": "2026-09-30",
+          "baseline_pct": 89.2,
+          "min_years_ordinary": 22,
+          "feb29_years": 6,
+          "normal_dates_ok": 359
+        }
+      }
+    },
+    {
+      "id": "UKM00003772",
+      "name": "HEATHROW",
+      "reason": "Fails 24/30 ordinary-date or 7/8 leap-date minimum for one or more elements.",
+      "audit": {
+        "TMAX": {
+          "first_valid": "1973-01-01",
+          "latest_valid": "2025-08-24",
+          "baseline_pct": 63.93,
+          "min_years_ordinary": 9,
+          "feb29_years": 4,
+          "normal_dates_ok": 25
+        },
+        "TMIN": {
+          "first_valid": "1973-01-01",
+          "latest_valid": "2025-08-22",
+          "baseline_pct": 53.75,
+          "min_years_ordinary": 7,
+          "feb29_years": 5,
+          "normal_dates_ok": 0
+        },
+        "PRCP": {
+          "first_valid": "1949-01-04",
+          "latest_valid": "2025-08-24",
+          "baseline_pct": 81.33,
+          "min_years_ordinary": 18,
+          "feb29_years": 5,
+          "normal_dates_ok": 259
+        }
+      }
+    },
+    {
+      "id": "UKM00003917",
+      "name": "ALDERGROVE",
+      "reason": "Fails 24/30 ordinary-date or 7/8 leap-date minimum for one or more elements.",
+      "audit": {
+        "TMAX": {
+          "first_valid": "1939-08-08",
+          "latest_valid": "2025-08-24",
+          "baseline_pct": 56.6,
+          "min_years_ordinary": 3,
+          "feb29_years": 5,
+          "normal_dates_ok": 2
+        },
+        "TMIN": {
+          "first_valid": "1939-08-08",
+          "latest_valid": "2025-08-17",
+          "baseline_pct": 42.29,
+          "min_years_ordinary": 2,
+          "feb29_years": 4,
+          "normal_dates_ok": 0
+        },
+        "PRCP": {
+          "first_valid": "1973-01-02",
+          "latest_valid": "2025-08-24",
+          "baseline_pct": 79.1,
+          "min_years_ordinary": 17,
+          "feb29_years": 6,
+          "normal_dates_ok": 208
+        }
+      }
+    }
+  ],
+  "notes": [
+    "Public unauthenticated source downloads only. No account was created or terms accepted.",
+    "Catalogue is an audited sample of UK stations, not the full observing network. NOAA UK country code also includes Crown Dependencies; none are included here.",
+    "Most audited UK ECA&D-fed files end in September 2026 on audit date; do not present archive climate values as yesterday or live observations.",
+    "Use observation dates supplied by GHCN-Daily; observing-day intervals can differ. Do not infer local-midnight intervals.",
+    "Source E means European Climate Assessment and Dataset; S means Global Summary of the Day. A blank quality flag only means NOAA checks did not flag it.",
+    "Calculated means and record comparisons must show source station, horizon, sample count and archive-through date."
+  ]
+}

@@ -1,0 +1,109 @@
+/* Inline climate references and a postcard with room for each reading. */
+.remember-choice{display:flex;align-items:center;gap:9px;margin:16px 0 7px;font-size:13px;color:#edf5f5;cursor:pointer}.remember-choice input{width:17px;height:17px;accent-color:var(--mint);flex:none}.settings-section #credentialHint{font-size:11px;line-height:1.5;margin-top:5px}
+.temperature-records{margin:0;display:flex;flex-direction:column;gap:7px;min-width:0;padding-left:22px;border-left:1px solid #b9d4df33;color:#c5dbe4}.record-caption{font-size:9px;letter-spacing:1px;line-height:1.5;color:#b3cbd8;margin-bottom:3px}.record-line{display:grid;grid-template-columns:31px 1fr;align-items:baseline;gap:1px 8px;font-size:13px;line-height:1.4}.record-line>span{color:#b5cbd7;font-size:11px}.record-line b{font-weight:500;color:#edf5f6}.record-line small{grid-column:2;font-size:11px;color:#bfd1de}.record-line:first-of-type b{color:#f3cfaa}
+.beaufort-caption{margin:3px 0;font-size:11px;line-height:1.5;color:var(--mint)}
+.card-metrics .rain-rate{font-size:10px;margin-top:3px;color:#c0d5df}.rain-rate b{font-weight:500;color:#eef5f4}.card-metrics .rain-record{font-size:10px;line-height:1.4;color:#b9cedc;margin-top:2px}
+.overview-panels{grid-template-columns:1fr 1.6fr .95fr .95fr 1.1fr}.rain-totals{grid-template-columns:1fr 1fr;gap:10px 22px;margin-top:10px}.rain-totals>div{display:flex;flex-direction:column;gap:0;padding-bottom:4px;min-width:0}.rain-totals>div>span:first-child{font-size:10px;line-height:1.3}.rain-totals strong{font-size:23px;line-height:1.15}.rain-totals strong.missing-reading{font-size:17px;line-height:1.55;color:#b9cfdc}.rain-totals small{font-size:9px;line-height:1.4;text-align:left}.rain-totals .rain-normal{display:block;font-size:10px;line-height:1.45;letter-spacing:0;color:#b9cfdc;margin-top:3px}.rain-normal b{font-weight:500;color:#e0edf0;margin-left:3px}.rain-totals .rain-comparison{display:block;font-size:9px;line-height:1.45;letter-spacing:0;color:#b7cbd9}.rain-comparison[data-comparison=above]{color:#9ce2cf}.rain-comparison[data-comparison=at]{color:#c7dce8}.rain-comparison[data-comparison=below]{color:#e4c99e}.overview-panels>.rain-panel{padding-bottom:12px}.rain-panel .rain-totals{flex:1}
+@media(min-width:1101px){
+ .overview-layout{--overview-height:clamp(390px,calc(100vh - 540px),460px);height:var(--overview-height);grid-template-columns:minmax(0,1fr) max(330px,calc(var(--overview-height) - 64px));grid-template-rows:minmax(0,1fr)}.overview-layout>.postcard-column,.overview-layout>.radar-panel{min-height:0}
+ .card-main{grid-template-columns:minmax(230px,1.2fr) minmax(205px,1fr) minmax(90px,.6fr) minmax(230px,1.1fr);gap:18px;padding:12px 24px;min-height:195px;flex:1}.temperature-block{grid-column:1}.temperature-records{grid-column:2}.sky-art{grid-column:3}
+ .wind-block{grid-column:4;display:grid;grid-template-columns:110px minmax(0,1fr);grid-template-rows:repeat(4,auto);column-gap:14px;align-items:center;text-align:left;min-width:0}.wind-block .compass{grid-column:1;grid-row:1/5;width:110px;height:110px;align-self:center}.compass-value{top:33px}.wind-caption,.beaufort-caption,.gust-caption,.daily-gust-caption{grid-column:2;margin:2px 0}.wind-caption{line-height:1.5}.daily-gust-caption{font-size:11px;line-height:1.4}.daily-gust-caption small{font-size:10px}
+ .temperature{font-size:96px}.temperature-secondary{white-space:normal;line-height:1.6}.sky-art{height:160px}.sky-art svg{width:160px}.sun-halo{width:160px;height:160px}.solar-pill{font-size:7px;padding:4px 7px;white-space:nowrap}
+ .card-metrics{grid-template-columns:1fr .9fr 1.35fr 1.35fr;padding:12px 0}.card-metrics>div{padding:0 18px}.card-metrics strong{font-size:28px}
+ .radar-panel{padding:13px 15px 10px}.radar-panel .panel-heading{display:block}.radar-panel .panel-heading .eyebrow{display:none}.radar-panel .panel-heading h3{font-size:17px}.radar-actions{justify-content:flex-start;margin-top:7px;gap:7px}.radar-actions .button{font-size:9px;padding:5px 8px}.radar-actions .radar-auto-label{font-size:7px!important;display:inline-block!important}.radar-body,.radar-body.loaded{margin-top:8px;min-height:0}.radar-panel .panel-footnote{font-size:8px;line-height:1.4;margin-top:7px;min-height:0}
+ .overview-panels>.panel{height:248px}
+}
+@media(min-width:1280px) and (max-width:1599px){
+ .overview-layout{--overview-height:clamp(360px,42vh,395px)}.card-main{grid-template-columns:minmax(220px,1.2fr) minmax(190px,1fr) minmax(70px,.45fr) minmax(215px,1.05fr);gap:12px;padding:8px 18px;min-height:190px}.temperature{font-size:82px}.condition{font-size:11px}.temperature-secondary{font-size:11px}.temperature-records{padding-left:15px}.record-caption{font-size:8px}.record-line{font-size:11px;grid-template-columns:27px 1fr;gap:1px 5px}.record-line>span,.record-line small{font-size:10px}.sky-art{height:120px}.sky-art svg{width:120px}.solar-pill{font-size:6px;padding:3px 5px}
+ .wind-block{grid-template-columns:92px minmax(0,1fr);column-gap:10px}.wind-block .compass{width:92px;height:92px}.compass-value{top:26px}.compass-value b{font-size:23px}.wind-caption{font-size:7px}.wind-caption b{font-size:9px}.beaufort-caption,.gust-caption{font-size:10px}.daily-gust-caption{font-size:9px}.daily-gust-caption small{font-size:8px}.card-metrics{padding:10px 0}.card-metrics>div{padding:0 12px}.card-metrics strong{font-size:23px}.card-metrics small{font-size:9px}.card-metrics .rain-rate,.card-metrics .rain-record{font-size:8px}
+ .overview-panels{gap:10px}.overview-panels>.panel{height:243px}.rain-totals{gap:10px 14px}.rain-totals strong{font-size:21px}.rain-totals .rain-normal{font-size:9px}.rain-totals .rain-comparison{font-size:8px}
+}
+@media(min-width:1600px) and (max-height:880px){.overview-layout{--overview-height:390px}.overview-panels>.panel{height:225px}footer{padding:8px 0}.card-main{padding-top:6px;padding-bottom:6px;min-height:185px}.temperature{font-size:84px}.sky-art{height:140px}.sky-art svg{width:140px}.wind-block .compass{width:100px;height:100px}.compass-value{top:29px}.rain-totals strong{font-size:21px}.rain-totals .rain-normal{font-size:9px}}
+@media(min-width:1101px) and (max-width:1279px){.overview-layout{--overview-height:390px}.card-main{grid-template-columns:minmax(190px,1fr) minmax(170px,1fr) minmax(190px,1fr);gap:10px;padding:10px 16px}.sky-art{display:none}.wind-block{grid-column:3;grid-template-columns:80px 1fr;column-gap:9px}.wind-block .compass{width:80px;height:80px}.compass-value{top:21px}.compass-value b{font-size:21px}.temperature{font-size:78px}.temperature-records{padding-left:12px}.record-line{font-size:11px}.record-caption{font-size:8px}.beaufort-caption{font-size:10px}.card-metrics strong{font-size:23px}.overview-panels{grid-template-columns:1fr 1.4fr 1fr}}
+@media(min-width:761px) and (max-width:1100px){.postcard-column{height:410px}.card-main{grid-template-columns:1.1fr 1fr 1fr;gap:18px;min-height:210px}.temperature-block{grid-column:1}.temperature-records{grid-column:2}.sky-art{display:none}.wind-block{grid-column:3}.beaufort-caption{font-size:11px}.temperature{font-size:84px}.temperature-secondary{white-space:normal}.card-metrics strong{font-size:24px}}
+@media(max-width:1100px){.overview-panels{grid-template-columns:1fr 1.4fr 1fr}.overview-panels>.rain-panel{height:auto;min-height:255px}.radar-panel{height:auto}.radar-body,.radar-body.loaded{flex:none;min-height:0;aspect-ratio:600/550;height:auto;max-height:440px}}
+@media(max-width:760px){
+ .postcard-column{height:auto}.card-main{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-rows:auto auto;min-height:0;padding:20px 18px;gap:20px 16px}.temperature-block{grid-column:1;grid-row:1}.temperature{font-size:78px}.temperature-secondary{white-space:normal;line-height:1.65;font-size:10px}.temperature-records{grid-column:2;grid-row:1;padding-left:14px;gap:5px;position:relative;z-index:1}.record-caption{font-size:8px;letter-spacing:.6px}.record-line{grid-template-columns:25px 1fr;font-size:11px;gap:1px 4px}.record-line>span,.record-line small{font-size:10px}.sky-art{right:auto;left:5px;top:10px;width:160px;height:150px;opacity:.08;z-index:0}
+ .wind-block{grid-column:1/-1;grid-row:2;justify-self:stretch;min-width:0;display:grid;grid-template-columns:100px 1fr 1fr;grid-template-rows:auto auto;align-items:center;text-align:left;gap:4px 14px;border-top:1px solid #b9d4df22;padding-top:13px}.wind-block .compass{grid-column:1;grid-row:1/3;width:92px;height:92px}.compass-value{top:26px}.wind-caption{grid-column:2;grid-row:1;font-size:7px;margin:0}.beaufort-caption{grid-column:3;grid-row:1;margin:0;font-size:10px}.gust-caption{grid-column:2;grid-row:2;margin:0;font-size:10px}.daily-gust-caption{grid-column:3;grid-row:2;margin:0;font-size:10px}.daily-gust-caption small{font-size:9px}
+ .overview-panels{grid-template-columns:1fr 1fr}.rain-totals{gap:10px 12px}.rain-totals strong{font-size:21px}.rain-totals .rain-normal{font-size:9px}.rain-totals .rain-comparison{font-size:8px}.card-metrics .rain-rate,.card-metrics .rain-record{font-size:9px}body.share-mode .card-main{min-height:0}body.share-mode .temperature{font-size:78px}
+}
+@media(max-width:450px){
+ .card-main{padding:18px 14px;gap:17px 10px}.temperature{font-size:70px}.condition{font-size:10px}.temperature-secondary{font-size:9px}.temperature-records{padding-left:10px}.record-line{display:flex;flex-wrap:wrap;gap:1px 4px;font-size:10px}.record-line>span{width:23px;font-size:9px}.record-line b{font-size:10px}.record-line small{display:block;width:100%;padding-left:27px;font-size:9px}.record-caption{font-size:7px}
+ .wind-block{grid-template-columns:84px minmax(0,1fr) minmax(0,1.1fr);gap:4px 10px}.wind-block .compass{width:78px;height:78px}.compass-value{top:21px}.compass-value b{font-size:21px}.compass-value #windKmh{font-size:7px}.wind-caption{font-size:6px;letter-spacing:.5px}.wind-caption b{font-size:8px}.gust-caption,.beaufort-caption,.daily-gust-caption{font-size:9px}.daily-gust-caption small{font-size:8px}
+ .card-metrics{align-items:start}.overview-panels{grid-template-columns:1fr}.overview-panels>.rain-panel{min-height:255px;height:auto}.rain-totals{gap:12px 24px}.rain-totals strong{font-size:23px}.rain-totals .rain-normal{font-size:10px}.rain-totals .rain-comparison{font-size:9px}body.share-mode .temperature{font-size:70px}
+}
+body.share-mode .temperature-records{margin:0}body.share-mode .record-line{font-size:12px}
+@media print{.card-main{min-height:230px}.temperature-records{margin:0}}
+
+/* Full-month/year records remain quiet references beside the live totals. */
+.period-rain-records{display:flex;flex-direction:column;gap:2px;border-top:1px solid #abc8d42b;padding-top:5px;margin-top:7px}
+.rain-totals .rain-record-caption{font-size:7px;line-height:1.5;letter-spacing:.5px;color:#a9c2d1}
+.rain-totals .period-record-line{font-size:9px;line-height:1.45;letter-spacing:0;color:#b7cdda}
+.period-record-line b{font-size:inherit;font-weight:500;color:#d6e7ec;margin-left:3px}
+@media(min-width:1600px){.overview-panels{grid-template-columns:1.05fr 2.5fr .95fr .95fr 1.15fr}.rain-totals{grid-template-columns:.7fr .7fr 1.6fr 1.6fr;gap:12px;align-items:start;margin-top:16px}.rain-totals strong{font-size:22px}.rain-totals strong.missing-reading{font-size:15px;line-height:1.7}.rain-totals .rain-normal{font-size:9px}.rain-totals .rain-comparison{font-size:9px}.rain-totals .period-record-line{font-size:9px}}
+@media(min-width:1600px) and (max-height:880px){.overview-panels>.panel{height:230px}}
+@media(min-width:1280px) and (max-width:1599px){.overview-panels>.panel{height:285px}.rain-totals .period-record-line{font-size:8px}.rain-totals .rain-record-caption{font-size:6px}.period-rain-records{gap:1px;padding-top:4px;margin-top:5px}}
+@media(max-width:1279px){.overview-panels>.rain-panel{height:auto;min-height:300px}}
+@media(max-width:450px){.overview-panels>.rain-panel{min-height:310px}.rain-totals .period-record-line{font-size:9px}.rain-totals .rain-record-caption{font-size:7px}}
+
+.copy-report{display:block;width:100%;height:min(50vh,380px);resize:vertical;background:#081a28;color:#e4eff2;border:1px solid var(--line);border-radius:7px;padding:14px;font:12px/1.6 var(--font)}
+
+.rain-detail-button{padding:0;border:0;background:none;color:inherit;font:inherit;line-height:inherit;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px}.rain-detail-button:focus-visible{outline:2px solid var(--mint);outline-offset:3px}#rainBreakdownDialog{max-width:900px}.rain-breakdown-scroll{overflow-x:auto}#rainBreakdownTable{width:100%;border-collapse:collapse;font-size:12px}#rainBreakdownTable th,#rainBreakdownTable td{text-align:left;padding:8px 7px;border-bottom:1px solid var(--line)}#rainBreakdownTable th{font-size:10px;color:#9ebdcd}#rainBreakdownTotal{color:var(--mint);font-size:17px}
+
+#rainBreakdownNote{margin-bottom:6px}.rain-breakdown-climate{font-size:11px;color:#a7c3cf;margin-top:0;margin-bottom:16px}#rainBreakdownTable tbody th{font-size:12px;font-weight:400;color:#c9dce4}#rainBreakdownTable td:nth-child(2),#rainBreakdownTable td:nth-child(3){white-space:nowrap;font-variant-numeric:tabular-nums}.monthly-rain-comparison{font-variant-numeric:tabular-nums}.monthly-rain-comparison[data-comparison=above]{color:#9ce2cf}.monthly-rain-comparison[data-comparison=at]{color:#c7dce8}.monthly-rain-comparison[data-comparison=below]{color:#e4c99e}.monthly-rain-comparison[data-comparison=unknown]{color:#9ab1bf}.rain-breakdown-stamp{font-size:10px;color:#9db7c5}
+@media(max-width:600px){#rainBreakdownDialog .dialog-body{padding-left:14px;padding-right:14px}#rainBreakdownTable{font-size:10px}#rainBreakdownTable th,#rainBreakdownTable td{padding:8px 4px}#rainBreakdownTable tbody th{font-size:10px}#rainBreakdownTable thead th{font-size:8px}#rainBreakdownTable .rain-breakdown-stamp{display:none}.monthly-rain-comparison{min-width:80px}#rainBreakdownDialog .dialog-heading{padding-left:18px;padding-right:18px}#rainBreakdownDialog h2{font-size:21px}}
+
+/* The forecast beacon sits beside the postcard, outside the screenshot card. */
+.overview-layout>.beacon-panel{margin:0;display:flex;flex-direction:column;min-width:0;height:100%}
+body.share-mode #beaconPanel{display:none!important}
+@media(min-width:1280px){
+ .overview-layout{grid-template-columns:minmax(0,1fr) clamp(180px,13vw,240px) max(260px,calc(var(--overview-height) - 84px))}
+ .overview-layout>.beacon-panel{padding:15px}
+ .overview-layout>.beacon-panel .panel-heading{display:block}
+ .overview-layout>.beacon-panel h3{font-size:16px;line-height:1.25}
+ .overview-layout>.beacon-panel .beacon-horizon{display:inline-block;margin-top:8px}
+ .overview-layout>.beacon-panel .beacon-main{flex-direction:column;justify-content:center;gap:8px;margin:10px 0;text-align:center}
+ .overview-layout>.beacon-panel .beacon-tower{width:84px;height:clamp(86px,calc(var(--overview-height) - 275px),130px)}
+ .overview-layout>.beacon-panel .beacon-copy strong{font-size:16px}
+ .overview-layout>.beacon-panel .beacon-copy p{font-size:10px;line-height:1.45;margin-top:5px}
+ .overview-layout>.beacon-panel .beacon-legend{margin-top:auto;flex-shrink:0;font-size:10px;gap:2px}
+ .overview-layout>.beacon-panel .beacon-source{font-size:8px;line-height:1.45;margin-top:9px}
+ .overview-panels{grid-template-columns:1.6fr .95fr .95fr 1.1fr}
+}
+@media(min-width:1280px) and (max-width:1599px){
+ .overview-layout{gap:12px}
+ .overview-layout .card-main{grid-template-columns:minmax(170px,1.15fr) minmax(145px,1fr) minmax(50px,.35fr) minmax(180px,1.05fr);gap:12px}
+ .overview-layout .temperature-records{padding-left:12px}
+ .overview-layout>.beacon-panel{padding:12px}
+ .overview-layout>.beacon-panel .beacon-main{gap:6px;margin:7px 0}
+ .overview-layout>.beacon-panel .beacon-copy strong{font-size:14px}
+ .overview-layout>.beacon-panel .beacon-copy p{font-size:9px}
+ .overview-layout>.beacon-panel .beacon-legend{font-size:10px}
+ .overview-layout>.beacon-panel .beacon-source{font-size:7px}
+}
+@media(min-width:761px) and (max-width:1279px){
+ .overview-layout{height:auto;grid-template-columns:minmax(0,1fr) 205px;grid-template-rows:auto auto;gap:14px}
+ .overview-layout>.postcard-column,.overview-layout>.beacon-panel{height:410px}
+ .overview-layout>.radar-panel{grid-column:1/-1;width:min(100%,520px);height:410px;justify-self:center}
+ .overview-layout .card-main{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1fr);gap:12px}
+ .overview-layout .sky-art{display:none}
+ .overview-layout .wind-block{grid-column:3;display:block;text-align:center}
+ .overview-layout .wind-block .compass{width:100px;height:100px}
+ .overview-layout .compass-value{top:29px}
+ .overview-layout .temperature{font-size:76px}
+ .overview-layout .temperature-records{padding-left:12px}
+ .overview-layout>.beacon-panel .panel-heading{display:block}
+ .overview-layout>.beacon-panel .beacon-horizon{display:inline-block;margin-top:8px}
+ .overview-layout>.beacon-panel .beacon-main{flex-direction:column;justify-content:center;text-align:center;gap:10px}
+ .overview-layout>.beacon-panel .beacon-tower{width:64px;height:90px}
+ .overview-panels{grid-template-columns:1.4fr 1fr}
+}
+@media(max-width:760px){
+ .overview-layout>.beacon-panel{height:auto;min-height:320px;padding:16px}
+ .overview-layout>.beacon-panel .beacon-tower{width:70px;height:110px}
+ .overview-layout>.beacon-panel .beacon-main{justify-content:center}
+}
+@media print{#beaconPanel{display:none!important}}
+
+/* Keep the building flexible while all four rhyme lines remain readable. */
+@media(min-width:761px){.overview-layout>.beacon-panel .beacon-tower{min-height:38px;flex-shrink:1}}

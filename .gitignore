@@ -1,0 +1,5 @@
+private/
+__pycache__/
+*.pyc
+runtime/windows-x64/
+*.tar

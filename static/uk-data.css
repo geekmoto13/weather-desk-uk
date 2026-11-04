@@ -1,0 +1,17 @@
+.rain-gauge-source{font-size:.65rem;line-height:1.4;color:var(--muted,#a5c6ce);margin:.5rem 0 0;max-width:100%;overflow-wrap:anywhere}
+
+
+.archive-actions{display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
+#midasDialog,#publicRainDialog{width:min(1100px,94vw);max-height:90vh}
+.archive-table-scroll{overflow:auto;max-height:340px;margin:1rem 0}
+.archive-table{width:100%;border-collapse:collapse;font-size:.85rem;text-align:left}
+.archive-table th,.archive-table td{padding:.65rem .8rem;border-bottom:1px solid #7294aa33;white-space:nowrap}
+.archive-table th{color:#a5c6ce;font-size:.75rem;font-weight:500}
+.archive-controls{display:flex;gap:1rem;flex-wrap:wrap;margin:1rem 0}
+.archive-controls label{display:grid;gap:.4rem;flex:1;min-width:180px}
+.archive-controls input,.archive-controls select{padding:.65rem;background:#152b3a;color:#eaf3f4;border:1px solid #526b7b;border-radius:5px}
+.archive-import{border:1px solid #7294aa44;padding:1rem;border-radius:8px;margin:1rem 0}
+.archive-import summary{cursor:pointer;color:#b6e4df}
+.archive-import input{max-width:100%;margin:1rem 0}
+.archive-small{font-size:.8rem;line-height:1.6;color:#bed0dc}
+@media(min-width:1350px){.rain-panel .rain-gauge-source{font-size:.58rem}}

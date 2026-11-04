@@ -1,0 +1,172 @@
+{
+  "stations": [
+    {
+      "id": "MET00002175",
+      "name": "Claremorris",
+      "lat": 53.711,
+      "lon": -8.993,
+      "country": "IE",
+      "daily_url": "https://clidata.met.ie/cli/climate_data/webdata/dly2175.csv",
+      "format": "met-daily-csv",
+      "referenceCells": 1097,
+      "audit": {
+        "TMAX": {
+          "first_valid": "1950-01-01",
+          "latest_valid": "2026-09-30"
+        },
+        "TMIN": {
+          "first_valid": "1950-01-01",
+          "latest_valid": "2026-09-30"
+        },
+        "PRCP": {
+          "first_valid": "1950-01-01",
+          "latest_valid": "2026-09-30"
+        }
+      }
+    },
+    {
+      "id": "MET00002375",
+      "name": "Belmullet",
+      "lat": 54.228,
+      "lon": -10.007,
+      "country": "IE",
+      "daily_url": "https://clidata.met.ie/cli/climate_data/webdata/dly2375.csv",
+      "format": "met-daily-csv",
+      "referenceCells": 1085,
+      "audit": {
+        "TMAX": {
+          "first_valid": "1956-09-17",
+          "latest_valid": "2026-09-30"
+        },
+        "TMIN": {
+          "first_valid": "1956-09-17",
+          "latest_valid": "2026-09-30"
+        },
+        "PRCP": {
+          "first_valid": "1956-09-17",
+          "latest_valid": "2026-09-30"
+        }
+      }
+    },
+    {
+      "id": "MET00002275",
+      "name": "Valentia Observatory",
+      "lat": 51.938,
+      "lon": -10.241,
+      "country": "IE",
+      "daily_url": "https://clidata.met.ie/cli/climate_data/webdata/dly2275.csv",
+      "format": "met-daily-csv",
+      "referenceCells": 1086,
+      "audit": {
+        "TMAX": {
+          "first_valid": "1942-01-01",
+          "latest_valid": "2026-09-30"
+        },
+        "TMIN": {
+          "first_valid": "1942-01-01",
+          "latest_valid": "2026-09-30"
+        },
+        "PRCP": {
+          "first_valid": "1942-01-01",
+          "latest_valid": "2026-09-30"
+        }
+      }
+    },
+    {
+      "id": "MET00000518",
+      "name": "Shannon Airport",
+      "lat": 52.69,
+      "lon": -8.918,
+      "country": "IE",
+      "daily_url": "https://clidata.met.ie/cli/climate_data/webdata/dly518.csv",
+      "format": "met-daily-csv",
+      "referenceCells": 986,
+      "audit": {
+        "TMAX": {
+          "first_valid": "1945-09-01",
+          "latest_valid": "2026-09-30"
+        },
+        "TMIN": {
+          "first_valid": "1945-09-01",
+          "latest_valid": "2026-09-30"
+        },
+        "PRCP": {
+          "first_valid": "1945-09-01",
+          "latest_valid": "2026-09-30"
+        }
+      }
+    },
+    {
+      "id": "MET00001575",
+      "name": "Malin head",
+      "lat": 55.372,
+      "lon": -7.339,
+      "country": "IE",
+      "daily_url": "https://clidata.met.ie/cli/climate_data/webdata/dly1575.csv",
+      "format": "met-daily-csv",
+      "referenceCells": 1097,
+      "audit": {
+        "TMAX": {
+          "first_valid": "1955-05-01",
+          "latest_valid": "2026-09-30"
+        },
+        "TMIN": {
+          "first_valid": "1955-05-01",
+          "latest_valid": "2026-09-30"
+        },
+        "PRCP": {
+          "first_valid": "1955-05-01",
+          "latest_valid": "2026-09-30"
+        }
+      }
+    },
+    {
+      "id": "MET00000532",
+      "name": "Dublin Airport",
+      "lat": 53.428,
+      "lon": -6.241,
+      "country": "IE",
+      "daily_url": "https://clidata.met.ie/cli/climate_data/webdata/dly532.csv",
+      "format": "met-daily-csv",
+      "referenceCells": 1031,
+      "audit": {
+        "TMAX": {
+          "first_valid": "1942-01-01",
+          "latest_valid": "2026-09-30"
+        },
+        "TMIN": {
+          "first_valid": "1942-01-01",
+          "latest_valid": "2026-09-30"
+        },
+        "PRCP": {
+          "first_valid": "1942-01-01",
+          "latest_valid": "2026-09-30"
+        }
+      }
+    },
+    {
+      "id": "MET00003904",
+      "name": "Cork Airport",
+      "lat": 51.847,
+      "lon": -8.486,
+      "country": "IE",
+      "daily_url": "https://clidata.met.ie/cli/climate_data/webdata/dly3904.csv",
+      "format": "met-daily-csv",
+      "referenceCells": 960,
+      "audit": {
+        "TMAX": {
+          "first_valid": "1962-01-01",
+          "latest_valid": "2026-09-30"
+        },
+        "TMIN": {
+          "first_valid": "1962-01-01",
+          "latest_valid": "2026-09-30"
+        },
+        "PRCP": {
+          "first_valid": "1962-04-01",
+          "latest_valid": "2026-09-30"
+        }
+      }
+    }
+  ]
+}

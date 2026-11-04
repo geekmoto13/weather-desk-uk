@@ -1,0 +1,50 @@
+Met Eireann data used by Weather Desk UK & Ireland UK9
+
+Copyright Met Eireann. Source https://www.met.ie/
+Observations and daily climate: CC BY 4.0.
+https://creativecommons.org/licenses/by/4.0/
+Met Eireann accepts no liability for errors, omissions, availability or loss
+arising from use of its data. This material has been modified from the original:
+selected daily elements are encoded in a compact cache format, units are
+converted, and averages, comparisons, dew point and feels-like are calculated.
+This is not an official Met Eireann product or a set of certified records.
+
+Observation collection / parameter definitions:
+https://opendata2.met.ie/edr/collections/observations-swob-nrt-60min
+https://opendata2.met.ie/obs_public/
+Temperature C; rain mm in preceding hour; wind/gust knots; pressure hPa at
+station elevation. Missing sensor sentinel -99 is excluded. Raw/provisional data.
+
+Daily source catalogue, station coordinates, URLs and field coverage:
+ireland-climate-stations.json. Source files accessed 25 October 2026.
+Daily intervals are 00:00-24:00 UTC, explicitly required by the CSV adapter.
+Temperature indicators 0/1 (positive/negative) accepted; 2/3/4 excluded.
+Rain indicator 0 accepted; indicator 2 accepted only for explicit zero (trace).
+Positive sums, deposition, estimates and missing observations are excluded.
+Key: https://opendata2.met.ie/opendata2/docs/KeyDaily.txt
+References need 24/30 baseline years, or 7/8 leap years. Missing references
+stay unavailable. Original supplied .csv data is refreshed from its own URL.
+The .dly cache format does not make these observations NOAA data.
+
+Forecast: https://prodapi.met.ie/weather/details/LATITUDE/LONGITUDE
+Public met.ie website JSON, not a guaranteed stable API. Fails visibly.
+https://www.met.ie/forecast-explained
+Forecast custom licence and requirement to display warnings:
+https://data.gov.ie/dataset/met-eireann-forecast-api
+Warnings: https://www.met.ie/Open_Data/json/warning_IRELAND.json
+All current/future Republic of Ireland land warnings are shown, preserving
+headlines and visible text, with timestamps and nationwide scope.
+
+Irish tides: Marine Institute / Irish National Tide Gauge Network, CC BY 4.0.
+https://erddap.marine.ie/erddap/info/IrishNationalTideGaugeNetwork/index.html
+Water_Level_OD_Malin: metres relative to OD Malin Head, OSGM15.
+QC_Flag: 0 unknown/provisional, 1 good, 9 missing (excluded).
+Displayed as time series; missing intervals remain gaps.
+
+Boundary: OpenStreetMap contributors, Wambacher / geoBoundaries.
+Open Data Commons Open Database Licence 1.0 (ODbL).
+https://www.openstreetmap.org/copyright
+https://opendatacommons.org/licenses/odbl/1-0/
+ireland-boundary.geojson is distributed unchanged as a separate database;
+its source, boundary version and download location are in
+ireland-boundary-source.json. Used only for weather-provider routing.

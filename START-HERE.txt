@@ -1,0 +1,51 @@
+WEATHER DESK UK - BUILD UK13
+
+UPDATING: close the old console and keep the old folder as a backup.
+Extract this ZIP into a new folder. Copy your matching edition's
+private folder into the new app folder to keep settings and history.
+
+Bundled Python: double-click START-WEATHER-DESK-UK.bat
+Installed Python 3.10+: double-click START-WITH-INSTALLED-PYTHON.bat
+Your browser opens http://127.0.0.1:8766/ . Keep the console open.
+
+For startup details run CHECK-WEATHER-DESK-RUNTIME.bat.
+The bundled option uses only the included runtime; it never silently
+switches Python. This version fixes isolated Python's app import path.
+
+See README.md for setup, data sources and saved-data information.
+
+Public weather now requires a station reporting measured rainfall as well as
+a recent temperature. Missing rain data never qualifies as a dry zero.
+
+The forecast beacon now includes the Berkeley Building rhyme.
+The highlighted line matches the current forecast signal.
+
+UK AND REPUBLIC OF IRELAND: choose your town in Settings and save.
+Irish locations use Met Eireann in Automatic public mode; Northern Ireland
+keeps UK sources. Connected personal Ambient stations retain priority.
+Irish rainfall uses UTC observing days. Incomplete month/year totals stay
+unavailable; recent rain is not a complete annual total. See README.md.
+
+DINGLE / IRELAND: tide curves are retained if a refresh fails.
+Official public station selects Met Eireann in Ireland. Missing month/year
+rain shows Incomplete history; Gauge details explains the missing hours.
+
+FREE SATELLITE LIGHTNING
+The UK and Ireland edition uses EUMETSAT’s Meteosat Lightning Imager. Its free Data Store downloads use your EUMETSAT account’s consumer key and secret.
+The nearby-flash panel shows distance, direction and occurrence time.
+It loads a 45-minute observation window through the displayed satellite time.
+A provisional reading is the nearest flash loaded so far, while earlier
+files are still loading. Missing/old data never mean no lightning.
+Blitzortung remains a separate free live map. No Weatherbit subscription is
+used or required. Keep the private folder to retain keys, settings and caches.
+
+PUBLIC STATION SEARCH AND PRESSURE HISTORY
+Optional Weather Underground data API key: Settings > More nearby personal stations.
+CWOP remains available without a key. Your connected Ambient station keeps priority.
+Earlier pressure is now recalled from the selected station where available,
+then saved locally. Keep the private folder when updating.
+
+NETWORK ACCESS (optional): double-click START-WEATHER-DESK-UK-LAN.bat instead.
+The console lists addresses like http://192.168.1.50:8766/ to open from other
+devices on your home network. There is no password, so use it only on a network
+you trust. Allow Python through Windows Firewall on Private networks only.

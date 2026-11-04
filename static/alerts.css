@@ -1,0 +1,24 @@
+/* A compact notice strip leaves the first-screen weather layout intact. */
+.weather-alerts{--alert-accent:#99b7c9;display:flex;align-items:center;gap:12px;padding:6px 15px;margin:0 0 10px;border:1px solid var(--line);border-left:3px solid var(--alert-accent);border-radius:9px;background:linear-gradient(105deg,color-mix(in srgb,var(--alert-accent),transparent 91%),var(--sky-panel));color:#e8f1f6}
+.weather-alerts[data-tone=warning]{--alert-accent:#ff9a9b;border-color:#ff9a9b55;background:linear-gradient(105deg,#742e3e80,var(--sky-panel))}
+.weather-alerts[data-tone=watch]{--alert-accent:#f1c46f;border-color:#f1c46f55;background:linear-gradient(105deg,#70572b65,var(--sky-panel))}
+.weather-alerts[data-tone=advisory]{--alert-accent:#8dcdf2;border-color:#8dcdf255}
+.weather-alerts[data-tone=statement]{--alert-accent:#c0b4ed}
+.weather-alerts[data-tone=quiet]{--alert-accent:var(--mint)}
+.weather-alerts[data-status=stale],.weather-alerts[data-status=unavailable]{border-style:dashed;border-left-style:solid}
+.alerts-mark{width:28px;height:28px;flex:none;border:1px solid var(--alert-accent);border-radius:50%;display:grid;place-items:center;font:600 17px/1 var(--font);color:var(--alert-accent)}
+.alerts-copy{min-width:0;flex:1}.alerts-area{margin:0 0 2px;font-size:8px;line-height:1.3;letter-spacing:1px;color:#bed2df;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.alerts-copy h2{margin:0;font-size:14px;line-height:1.3;font-weight:550;color:var(--alert-accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.alerts-summary{font-size:9px;line-height:1.4;color:#ccdae5;margin:1px 0 0;overflow-wrap:anywhere}
+.alerts-actions{display:flex;align-items:center;gap:14px;flex:none}.alerts-checked{font-size:9px;color:#b4cbd9;white-space:nowrap}.alerts-actions .button{font-size:10px;white-space:nowrap;padding:8px 12px}
+.alerts-live{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+#alertsDialog{max-width:850px}.alerts-dialog-note{font-size:11px;line-height:1.7;color:#b9d0df;margin:17px 0}.alerts-list{font-size:12px;line-height:1.7;overflow-wrap:anywhere}
+.alert-detail{padding:16px 18px;margin:15px 0;border:1px solid var(--line);border-left:3px solid #c0b4ed;border-radius:7px;background:#06172445}
+.alert-detail[data-tone=warning]{border-left-color:#ff9a9b}.alert-detail[data-tone=watch]{border-left-color:#f1c46f}.alert-detail[data-tone=advisory]{border-left-color:#8dcdf2}
+.alert-detail h3{font-size:18px;font-weight:550;line-height:1.4;margin:0 0 9px;color:#edf4f7}.alert-detail h4{font-size:13px;margin:18px 0 5px;color:#edf4f7}.alert-detail p{white-space:pre-line;margin:9px 0;color:#d0e0e9}.alert-detail .alert-headline{font-weight:550;color:#e5eff6}.alert-detail .alert-meta,.alert-detail .alert-area{font-size:11px;color:#adc8d8}.alerts-stale-note{padding:12px 14px;background:#76602c40;border:1px solid #d9b96855;border-radius:6px;color:#f0d8ac}
+#alertsDialog .dialog-footer{justify-content:space-between;flex-wrap:wrap}#alertsOfficialLink{font-size:12px}.alerts-location-hint{font-size:10px!important}
+@media(min-width:1600px){.overview-layout{--overview-height:clamp(390px,calc(100vh - 610px),460px)}}
+@media(max-width:1100px){.alerts-actions{display:block;text-align:right}.alerts-checked{display:block;margin-bottom:6px;font-size:8px}}
+@media(max-width:760px){.weather-alerts{padding:10px 12px;gap:10px;align-items:flex-start}.alerts-mark{width:23px;height:23px;font-size:14px;margin-top:3px}.alerts-copy h2{font-size:13px;white-space:normal}.alerts-area{font-size:7px;letter-spacing:.7px;white-space:normal}.alerts-summary{font-size:9px}.alerts-actions{align-self:center}.alerts-checked{display:none}.alerts-actions .button{padding:7px 9px;font-size:9px}.alert-detail{padding:13px}.alert-detail h3{font-size:17px}}
+@media(max-width:450px){.weather-alerts{gap:8px}.alerts-mark{display:none}.alerts-copy h2{font-size:12px}.alerts-summary{font-size:9px;line-height:1.5}}
+@media print{.weather-alerts{display:none!important}}

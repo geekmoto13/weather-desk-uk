@@ -1,0 +1,4 @@
+h5wasm 0.10.3, pinned npm distribution, source https://github.com/usnistgov/h5wasm
+Local browser IIFE SHA256: 29a56a9e4576957b8ce0cce4fdc41527f72539fc6b062f74985882fce06f3952
+The upstream LICENSE.txt is included unmodified as h5wasm-LICENSE.txt.
+The upstream browser IIFE includes its WebAssembly payload; no CDN is contacted.

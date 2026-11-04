@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "file": "python-windows-x64.zip",
+  "bytes": 12338516,
+  "sha256": "4ffe5af971e17b1ea4674fef872ad70d105730c712cf777a714489c89a560fed",
+  "pythonVersion": "3.14.9",
+  "source": "Official unchanged CPython Windows x64 embeddable distribution plus provenance record."
+}

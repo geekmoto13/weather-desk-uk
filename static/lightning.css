@@ -1,0 +1,301 @@
+/* Shared Sun & Moon card frees the former moon card for lightning. */
+.overview-panels > .sky-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.sky-panel .panel-heading {
+  align-items: center;
+}
+.sky-panel .sky-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+}
+.sky-panel .sun-arc {
+  width: 76px;
+  height: 32px;
+  margin: 0;
+  flex: 0 0 76px;
+}
+.sky-panel .moon-overview {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  margin: 0;
+  min-width: 0;
+}
+.sky-panel .moon-overview svg {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+}
+.sky-panel .moon-overview strong {
+  font-size: 11px;
+  line-height: 1.25;
+}
+.sky-panel .moon-overview span {
+  font-size: 9px;
+  margin-top: 2px;
+}
+.sky-panel .sky-times {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 15px;
+}
+.sky-panel .sky-times span {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 0.6px;
+  color: var(--muted);
+}
+.sky-panel .sky-times strong {
+  display: block;
+  font-size: 17px;
+  font-weight: 450;
+  line-height: 1.3;
+  margin-top: 2px;
+}
+.sky-panel .mini-values {
+  display: grid;
+  grid-template-columns: 1.35fr 0.6fr 1fr;
+  gap: 8px;
+  padding-top: 7px;
+  margin-top: auto;
+}
+.sky-panel .mini-values > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0;
+  font-size: 8px;
+}
+.sky-panel .mini-values b {
+  font-size: 10px;
+  white-space: nowrap;
+}
+.sky-panel .panel-footnote {
+  display: block;
+  margin: 0;
+  font-size: 7px;
+  line-height: 1.3;
+}
+.overview-panels > .lightning-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.lightning-panel .panel-heading {
+  align-items: center;
+}
+.lightning-panel .panel-symbol {
+  color: #f3d58e;
+  font-size: 25px;
+}
+.lightning-reading {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 45px;
+}
+.lightning-reading strong {
+  font-size: 19px;
+  font-weight: 450;
+  line-height: 1.25;
+  color: #f3d58e;
+}
+.lightning-reading span {
+  font-size: 9px;
+  line-height: 1.4;
+  color: #c9dce6;
+}
+.lightning-reading small {
+  font-size: 8px;
+  line-height: 1.35;
+  color: var(--muted);
+}
+.lightning-panel[data-state="error"] .lightning-reading strong {
+  color: #e7b0c3;
+}
+.lightning-mini-map {
+  position: relative;
+  flex: 1;
+  min-height: 72px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #0b1726;
+}
+.lightning-mini-map iframe {
+  border: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+}
+.lightning-map-centre {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 13px;
+  height: 13px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  border: 2px solid white;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 2px #17212c,
+    0 0 0 6px #ffffff30;
+}
+.lightning-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 9px;
+}
+.lightning-actions .text-button {
+  font-size: 9px;
+  padding: 0;
+}
+.lightning-panel .panel-footnote {
+  font-size: 8px;
+  line-height: 1.35;
+  margin: 0;
+}
+.lightning-panel .lightning-checked {
+  font-size: 7px;
+  margin: 0;
+  color: var(--muted);
+}
+#lightningMapDialog {
+  max-width: 1150px;
+  width: calc(100% - 32px);
+}
+.lightning-dialog-body {
+  padding: 14px 20px 18px;
+}
+.lightning-dialog-body iframe {
+  width: 100%;
+  height: min(62vh, 650px);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #0b1726;
+}
+.lightning-dialog-body p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+.lightning-dialog-body .lightning-actions {
+  margin-top: 10px;
+  font-size: 11px;
+}
+.lightning-settings .connect-actions {
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.lightning-settings .connect-actions button {
+  font-size: 11px;
+}
+@media (min-width: 1280px) {
+  .overview-panels > .panel {
+    height: 280px;
+  }
+}
+@media (min-width: 1600px) {
+  .overview-panels {
+    grid-template-columns: minmax(0, 2.5fr) minmax(235px, 1.15fr) minmax(
+        260px,
+        1.25fr
+      ) minmax(0, 1.15fr);
+  }
+}
+@media (min-width: 1280px) and (max-width: 1599px) {
+  .overview-panels {
+    grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr) minmax(
+        0,
+        1.15fr
+      ) minmax(0, 1.1fr);
+  }
+  .sky-panel .sun-arc {
+    display: none;
+  }
+  .sky-panel .sky-times strong {
+    font-size: 16px;
+  }
+  .sky-panel .mini-values {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  .sky-panel .mini-values > div {
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 9px;
+  }
+  .lightning-reading strong {
+    font-size: 17px;
+  }
+}
+@media (min-width: 761px) and (max-width: 1279px) {
+  .overview-panels {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+  .overview-panels > .sky-panel,
+  .overview-panels > .lightning-panel {
+    height: 275px;
+  }
+}
+@media (max-width: 760px) {
+  .overview-panels {
+    grid-template-columns: 1fr 1fr;
+  }
+  .overview-panels > .sky-panel,
+  .overview-panels > .lightning-panel {
+    height: 285px;
+  }
+  .sky-panel .sun-arc {
+    display: none;
+  }
+  .sky-panel .mini-values {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  .sky-panel .mini-values > div {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .sky-panel .sky-times {
+    gap: 10px;
+  }
+  .lightning-reading strong {
+    font-size: 16px;
+  }
+}
+@media (max-width: 520px) {
+  .overview-panels {
+    grid-template-columns: 1fr;
+  }
+  .overview-panels > .sky-panel {
+    height: 265px;
+  }
+  .overview-panels > .lightning-panel {
+    height: 325px;
+  }
+  .sky-panel .sun-arc {
+    display: block;
+  }
+  .sky-panel .sky-summary {
+    justify-content: space-between;
+  }
+  .sky-panel .sky-times strong {
+    font-size: 18px;
+  }
+  .sky-panel .mini-values {
+    grid-template-columns: 1.4fr 0.6fr 1fr;
+  }
+  .sky-panel .mini-values > div {
+    flex-direction: column;
+  }
+}

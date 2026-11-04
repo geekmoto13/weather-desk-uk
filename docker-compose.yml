@@ -1,0 +1,12 @@
+services:
+  weather-desk-uk:
+    image: ghcr.io/geekmoto13/weather-desk-uk:latest
+    container_name: weather-desk-uk
+    ports:
+      - "8766:8766"
+    restart: unless-stopped
+    volumes:
+      - weather-desk-uk-data:/app/private
+
+volumes:
+  weather-desk-uk-data:

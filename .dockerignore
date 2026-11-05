@@ -1,6 +1,7 @@
 private/
 runtime/
 tests/
+docs/
 *.bat
 *.command
 *.ps1

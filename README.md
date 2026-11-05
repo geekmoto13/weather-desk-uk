@@ -13,7 +13,7 @@ everything you save stays on your machine.
 > **Edition:** UK & Ireland, build UK13. There is also a
 > [US edition](https://github.com/geekmoto13/weather-desk). The two use different
 > ports (8766 here, 8765 there), so you can run both side by side.
-> <!-- Add a screenshot here: ![Screenshot](docs/screenshot.png) -->
+screenshot here: ![Screenshot](docs/screenshot.png)
 
 ## What it shows
 

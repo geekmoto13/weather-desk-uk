@@ -21,9 +21,11 @@ from local_store import write_private_json
 from timezones import local_date, midnight, _british_changes
 from uk_sources import Cache
 from weather_location import distance_km
+from rain_since import interval_rain_since
 
 UTC = dt.timezone.utc
 EDR = "https://opendata2.met.ie/edr/collections/observations-swob-nrt-60min"
+MINUTE_EDR = "https://opendata2.met.ie/edr/collections/observations-swob-nrt-1min"
 WARNINGS = "https://www.met.ie/Open_Data/json/warning_IRELAND.json"
 PARAMETERS = "air_temperature,relative_humidity,precipitation_amount,wind_speed_mean,wind_direction,wind_gust,air_pressure"
 SOURCE_NOTE = "© Met Éireann · www.met.ie · CC BY 4.0. Raw observations are provisional. Units and display have been converted. Rain uses 00:00–24:00 UTC observing days. Station pressure is not sea-level pressure."
@@ -44,6 +46,35 @@ def valid(value, low, high):
         and math.isfinite(value)
         and low <= value <= high
     )
+
+
+def ten_minute_wind(raw, station_id, observation_time):
+    """Ten contiguous one-minute scalar means make one true ten-minute mean."""
+    if (not isinstance(raw, dict) or raw.get("collection_id") != "observations-swob-nrt-1min"
+            or str(raw.get("station_id")) != str(int(station_id))):
+        return {}
+    items = raw.get("items", [])
+    if not isinstance(items, list) or raw.get("numberMatched", raw.get("count_total", 0)) > len(items):
+        return {}
+    points = {}
+    for item in items:
+        if not isinstance(item, dict) or item.get("parameter_name", raw.get("parameter_name")) != "wind_speed" or item.get("sensor_source") not in (None, "", "suit_a"):
+            continue
+        when, speed = stamp(item.get("observed_at")), item.get("value_num")
+        if when is None or not observation_time-1200 <= when <= observation_time:
+            continue
+        speed = speed if valid(speed, 0, 250) else None
+        points[when] = None if when in points and points[when] != speed else speed
+    ends = [t for t, v in points.items() if v is not None and observation_time-120 <= t <= observation_time]
+    if not ends:
+        return {}
+    end = max(ends)
+    values = [points.get(end-i*60) for i in range(10)]
+    if any(v is None for v in values):
+        return {}
+    return {"windMean10mMph": math.fsum(values)/10*1.150779448,
+            "windMean10mTimestamp": end,
+            "windMean10mSource": "Met Éireann: ten complete one-minute scalar means"}
 
 
 def parse_observations(raw, feels, now):
@@ -161,6 +192,7 @@ def rain_ledger(readings, station, now):
         "periods": periods,
         "months": [],
         "rateMmHr": None,
+        "rainSince": interval_rain_since(rain, 3600, now),
         "stale": through is None or now - through > 5400,
         "note": "Measured hourly rain. Totals use UTC calendar boundaries, matching the Met Éireann daily archive. ≥ is only a measured subtotal: missing hours are not zero. Month/YTD remain incomplete unless every hour is present. Rain-event totals and instantaneous rates are not supplied.",
         "sourceUrl": "https://opendata2.met.ie/obs_public/",
@@ -298,6 +330,19 @@ class IrishPublicWeather:
                         }
                         combined.update({r["timestamp"]: r for r in history})
                         history = [combined[t] for t in sorted(combined)]
+                    prior_current = old.get("current") or {}
+                    if prior_current.get("timestamp") == current["timestamp"] and prior_current.get("windMean10mMph") is not None:
+                        current.update({k: prior_current[k] for k in ("windMean10mMph", "windMean10mTimestamp", "windMean10mSource") if k in prior_current})
+                    else:
+                        try:
+                            iso = lambda t: dt.datetime.fromtimestamp(t, UTC).isoformat().replace("+00:00", "Z")
+                            raw_wind = self.fetch(MINUTE_EDR + "/locations/" + sid.zfill(4) + "?" + urlencode({
+                                "datetime": iso(current["timestamp"]-1200) + "/" + iso(current["timestamp"]),
+                                "parameter-name": "wind_speed", "f": "json", "limit": 200,
+                            }))
+                            current.update(ten_minute_wind(raw_wind, sid, current["timestamp"]))
+                        except Exception:
+                            pass  # Hourly weather/rain remain usable if minute wind fails.
                     rain = rain_ledger(history, station, now)
                     for period, field in [
                         ("day", "rainDayMm"),

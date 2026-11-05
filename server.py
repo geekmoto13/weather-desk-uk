@@ -37,6 +37,7 @@ from climate_rain import RainfallRecords
 from annual_rain import AnnualRain
 from historical_days import HistoricalDays, canonical_zone, finite, validate_day
 from local_store import SavedStationError, StationStore
+from rain_since import RainMemory, rain_time
 from lightning import LightningDesk, LightningError
 from uk_location import LocationResolver
 from uk_sources import UKPublicWeather as PublicWeather, UKForecast, UKWarnings, RadarData
@@ -57,7 +58,7 @@ from ireland_tides import IrishTides
 
 ROOT = Path(__file__).resolve().parent
 UTC = dt.timezone.utc
-BUILD = "UK13"
+BUILD = "UK14"
 DEFAULTS = {
     "title": "Weather Desk UK & Ireland",
     "location": "Swadlincote, Derbyshire",
@@ -195,6 +196,9 @@ def normalize(raw):
         "dewSource": dew_source,
         "humidity": humidity,
         "windMph": wind,
+        "windMean10mMph": bounded(raw.get("windspdmph_avg10m"), 0, 400),
+        "windMean10mSource": "Ambient station ten-minute mean",
+        "lastRainAt": rain_time(raw.get("lastRain"), observed_time(raw)),
         "gustMph": bounded(raw.get("windgustmph"), 0, 400),
         "maxGustMph": bounded(raw.get("maxdailygust"), 0, 400),
         "windDeg": bounded(raw.get("winddir"), 0, 360),
@@ -386,6 +390,7 @@ class Desk:
             settings_path.write_text(json.dumps(self.settings, indent=2), encoding="utf-8")
         self.location_choices = {}
         self.wunderground = WundergroundWeather(self.data_dir, feels_like)
+        self.rain_memory = RainMemory(self.data_dir)
         self.public_weather = PreferredPublicWeather(
             self.data_dir,
             PublicWeather(
@@ -766,6 +771,27 @@ class Desk:
         ]
 
     def weather(self):
+        value = self._weather_observation()
+        current = value.get("current")
+        rain = value.get("rain") or {}
+        if not value.get("demo") and isinstance(rain.get("rainSince"), dict):
+            value["rainSince"] = {**rain["rainSince"], "source": (rain.get("providerLabel") or rain.get("source") or "Rain gauge") + " · " + str(rain.get("stationName") or "selected gauge")}
+            return value
+        if not current or value.get("demo"):
+            value["rainSince"] = {"status": "unavailable", "seconds": None, "source": "Sample weather" if value.get("demo") else "Waiting for observations"}
+            return value
+        with self.lock:
+            ambient = self.weather_mode() == "ambient"
+            settings = dict(self.settings)
+            identity = "ambient:" + self.mac if ambient else str(value.get("source")) + ":" + str(value.get("stationId"))
+            source = ("Ambient · " if ambient else str(value.get("provider") or value.get("source") or "Public") + " · ") + str(value.get("stationName") or "station")
+            history = self.saved_history() if ambient else value.get("points", value.get("history", []))
+        original = {**current, **(value.get("stationRain") or {})}
+        value["rainSince"] = self.rain_memory.snapshot(identity, source, original,
+            [*history, *value.get("windHistory", [])], time.time(), settings["timezone"])
+        return value
+
+    def _weather_observation(self):
         if self.weather_mode() == "noaa":
             with self.lock:
                 settings = copy.deepcopy(self.settings)

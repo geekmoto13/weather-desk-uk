@@ -1,3 +1,44 @@
+# Validation — UK14
+
+- 325 Python and 78 JavaScript checks pass. New tests cover native
+  ten-minute means versus live wind/gust, real calm zero, scalar time weighting,
+  interpolation and window clipping, insufficient samples and long gaps,
+  twilight stages through a complete day, dawn/dusk and polar daylight/night.
+- Rain-age tests cover native timestamps and minute-rounded observations,
+  missing/future/naive values, continuous interval coverage, lower bounds,
+  gaps, offline periods, rolling-window constraints, counter changes and resets,
+  per-station isolation, saved restart history and history arriving after the
+  first live request. No missing report becomes a dry zero.
+- UK/Ireland tests also cover ten consecutive one-minute means, filtered live
+  API response shape, missing/invalid/rejected minutes, station identity,
+  truncated responses, conflicting duplicate readings and rejection of the
+  hourly averaging period for the ten-minute Beaufort input.
+- Live NOAA MADIS recwin=4 retrieval returned real multiple CWOP observations.
+  The tested F1308 sample reported at 15-minute intervals; it correctly cannot
+  provide a ten-minute estimate. A synthetic three-report history passed the
+  complete HTTP-to-JavaScript pipeline and produced a 10 mph mean / Beaufort 3
+  while its latest wind was 20 mph.
+- A real Met Éireann one-minute wind response for Valentia (0102), ending
+  4 November 2026 at 21:00 UTC, produced 3.2700548794 mph from ten complete
+  minute means. The hourly metadata explicitly describes a one-hour mean;
+  the minute metadata describes the preceding minute. A data request for a
+  later unavailable window returned no observations and remained unavailable.
+- Both local HTTP servers pass all page asset and HTML-ID checks, native
+  Ambient wind/rain handling, rain-cache restart, public station/gauge source
+  isolation and CWOP-history-to-Beaufort calculation. These route tests use
+  labelled fixtures, not private user station credentials.
+- Python 3.10 syntax and changed JavaScript syntax are checked. Closed ZIPs
+  are CRC/hash checked, extracted and started twice using the isolated
+  installed-Python launcher, with saved-setting restart persistence. Runtime
+  archives, bootstrap files and launchers remain byte-identical to the input
+  release. Native Windows and visual browser execution remain unverified.
+- No private keys, settings, rain caches, development scripts, research feed
+  captures or QA output are included in the download. Earlier release archives
+  are retained separately. Production code remains standard-library Python
+  and locally bundled JavaScript with no added dependency downloads.
+
+## Previous release validation
+
 # Validation — UK13
 
 - 299 Python and 67 JavaScript checks passed in this update.

@@ -70,6 +70,8 @@ def metar_reading(row, feels):
         "feelsF": value,
         "feelsSource": method,
         "windMph": speed,
+        "windMean10mMph": speed if str(row.get("icaoId", "")).startswith(("EG", "EI")) else None,
+        "windMean10mSource": "UK/Ireland METAR reported mean (ten-minute convention)",
         "windDeg": number(row.get("wdir")),
         "gustMph": gust,
         "maxGustMph": None,

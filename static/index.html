@@ -8,32 +8,32 @@
   <title>Weather Desk UK &amp; Ireland</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/desktop.css?v=UK13">
-  <link rel="stylesheet" href="/climate.css?v=UK13">
-  <script src="/astro.js" defer></script>
-  <script src="/design.js?v=UK13" defer></script>
-  <script src="/climate.js?v=UK13" defer></script>
-  <script src="/readings.js?v=UK13" defer></script>
-  <link rel="stylesheet" href="/alerts.css?v=UK13">
-  <script src="/alerts.js?v=UK13" defer></script>
-  <link rel="stylesheet" href="/past.css?v=UK13">
-  <script src="/past.js?v=UK13" defer></script>
-  <link rel="stylesheet" href="/radio.css?v=UK13">
-  <script src="/radio.js?v=UK13" defer></script>
-  <link rel="stylesheet" href="/location.css?v=UK13">
-  <script src="/location.js?v=UK13" defer></script>
-  <script src="/calendar.js?v=UK13" defer></script>
-  <link rel="stylesheet" href="/uk.css?v=UK13">
-  <script src="/uk-radar.js?v=UK13" defer></script>
-  <script src="/uk-monthly.js?v=UK13" defer></script>
-  <link rel="stylesheet" href="/uk-data.css?v=UK13">
-  <script src="/uk-data.js?v=UK13" defer></script>
-  <link rel="stylesheet" href="/uk-tides.css?v=UK13">
-  <script src="/uk-tides.js?v=UK13" defer></script>
-  <link rel="stylesheet" href="/lightning.css?v=UK13">
-  <script src="/lightning.js?v=UK13" defer></script>
-  <script src="/public-stations.js?v=UK13" defer></script>
-  <script src="/app.js?v=UK13" defer></script>
+  <link rel="stylesheet" href="/desktop.css?v=UK14">
+  <link rel="stylesheet" href="/climate.css?v=UK14">
+  <script src="/astro.js?v=UK14" defer></script>
+  <script src="/design.js?v=UK14" defer></script>
+  <script src="/climate.js?v=UK14" defer></script>
+  <script src="/readings.js?v=UK14" defer></script>
+  <link rel="stylesheet" href="/alerts.css?v=UK14">
+  <script src="/alerts.js?v=UK14" defer></script>
+  <link rel="stylesheet" href="/past.css?v=UK14">
+  <script src="/past.js?v=UK14" defer></script>
+  <link rel="stylesheet" href="/radio.css?v=UK14">
+  <script src="/radio.js?v=UK14" defer></script>
+  <link rel="stylesheet" href="/location.css?v=UK14">
+  <script src="/location.js?v=UK14" defer></script>
+  <script src="/calendar.js?v=UK14" defer></script>
+  <link rel="stylesheet" href="/uk.css?v=UK14">
+  <script src="/uk-radar.js?v=UK14" defer></script>
+  <script src="/uk-monthly.js?v=UK14" defer></script>
+  <link rel="stylesheet" href="/uk-data.css?v=UK14">
+  <script src="/uk-data.js?v=UK14" defer></script>
+  <link rel="stylesheet" href="/uk-tides.css?v=UK14">
+  <script src="/uk-tides.js?v=UK14" defer></script>
+  <link rel="stylesheet" href="/lightning.css?v=UK14">
+  <script src="/lightning.js?v=UK14" defer></script>
+  <script src="/public-stations.js?v=UK14" defer></script>
+  <script src="/app.js?v=UK14" defer></script>
 </head>
 <body data-sky="night">
 <div class="page-shell">
@@ -53,7 +53,7 @@
           <div class="temperature-block"><div class="condition" id="conditionLabel">Your weather, at a glance</div><div class="temperature"><span id="tempF">—</span><span class="temperature-unit">°C</span></div><div class="temperature-secondary"><span id="tempC">—</span> °F <span class="thin-divider">/</span> Feels like <span id="feelsF">—</span>°C · <span id="feelsC">—</span>°F</div></div>
           <div class="temperature-records" id="temperatureRecords"><span class="record-caption" id="tempRecordLabel">CLIMATE RECORDS · THIS DATE</span><span class="record-line"><span>High</span><b id="recordHigh">—</b><small id="recordHighYear">Loading…</small></span><span class="record-line"><span>Low</span><b id="recordLow">—</b><small id="recordLowYear">Loading…</small></span></div>
           <div class="sky-art" aria-hidden="true"><div class="sun-halo"></div><svg id="skyIcon" viewBox="0 0 240 210"><g class="sun-rays" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M120 20v13M120 177v13M35 105h13M192 105h13M60 45l10 10M170 155l10 10M60 165l10-10M170 55l10-10"/></g><circle class="sun-circle" cx="120" cy="105" r="45" fill="none" stroke="currentColor" stroke-width="2"/><path class="moon-shape" d="M148 45a66 66 0 1 0 43 110A73 73 0 0 1 148 45Z" fill="none" stroke="currentColor" stroke-width="2"/><g class="art-stars" fill="currentColor"><circle cx="58" cy="48" r="2"/><circle cx="195" cy="57" r="2"/><circle cx="200" cy="125" r="1.5"/><circle cx="173" cy="24" r="1.5"/></g><path d="M31 179Q120 165 209 179M48 190Q120 181 192 190" fill="none" stroke="currentColor" stroke-width="1" opacity=".3"/></svg><span id="solarPill" class="solar-pill">LIGHT LEVEL —</span></div>
-          <div class="wind-block"><div class="compass" id="compass"><span class="north">N</span><span class="east">E</span><span class="south">S</span><span class="west">W</span><svg viewBox="0 0 160 160" aria-hidden="true"><circle cx="80" cy="80" r="69" fill="none" stroke="currentColor" stroke-opacity=".45"/><circle cx="80" cy="80" r="52" fill="none" stroke="currentColor" stroke-opacity=".16"/><g fill="none" stroke="currentColor" stroke-opacity=".5"><path d="M80 12V20" transform="rotate(0 80 80)"/><path d="M80 12V20" transform="rotate(30 80 80)"/><path d="M80 12V20" transform="rotate(60 80 80)"/><path d="M80 12V20" transform="rotate(90 80 80)"/><path d="M80 12V20" transform="rotate(120 80 80)"/><path d="M80 12V20" transform="rotate(150 80 80)"/><path d="M80 12V20" transform="rotate(180 80 80)"/><path d="M80 12V20" transform="rotate(210 80 80)"/><path d="M80 12V20" transform="rotate(240 80 80)"/><path d="M80 12V20" transform="rotate(270 80 80)"/><path d="M80 12V20" transform="rotate(300 80 80)"/><path d="M80 12V20" transform="rotate(330 80 80)"/></g><g id="windNeedle"><path d="M80 4L89 24L80 20L71 24Z" fill="#80ddd0"/><path d="M80 156L86 141L80 144L74 141Z" fill="#80ddd0" opacity=".35"/></g></svg><div class="compass-value"><b id="windSpeed">—</b><small>mph<span id="windKmh">— km/h</span></small></div></div><p class="wind-caption">FROM <b id="windDirection">—</b> <span id="windDegrees">—</span></p><p class="beaufort-caption" id="beaufortWind" title="Beaufort equivalent of the current station wind speed, rather than gusts. The formal scale normally uses a 10-minute mean at 10 metres.">Beaufort —</p><p class="gust-caption">Gusts <b id="windGust">— mph</b></p><p class="daily-gust-caption" title="Highest wind gust since your station’s daily reset">Daily max gust <b id="dailyMaxGust">— mph</b><small id="dailyMaxGustKmh">— km/h</small></p></div>
+          <div class="wind-block"><div class="compass" id="compass"><span class="north">N</span><span class="east">E</span><span class="south">S</span><span class="west">W</span><svg viewBox="0 0 160 160" aria-hidden="true"><circle cx="80" cy="80" r="69" fill="none" stroke="currentColor" stroke-opacity=".45"/><circle cx="80" cy="80" r="52" fill="none" stroke="currentColor" stroke-opacity=".16"/><g fill="none" stroke="currentColor" stroke-opacity=".5"><path d="M80 12V20" transform="rotate(0 80 80)"/><path d="M80 12V20" transform="rotate(30 80 80)"/><path d="M80 12V20" transform="rotate(60 80 80)"/><path d="M80 12V20" transform="rotate(90 80 80)"/><path d="M80 12V20" transform="rotate(120 80 80)"/><path d="M80 12V20" transform="rotate(150 80 80)"/><path d="M80 12V20" transform="rotate(180 80 80)"/><path d="M80 12V20" transform="rotate(210 80 80)"/><path d="M80 12V20" transform="rotate(240 80 80)"/><path d="M80 12V20" transform="rotate(270 80 80)"/><path d="M80 12V20" transform="rotate(300 80 80)"/><path d="M80 12V20" transform="rotate(330 80 80)"/></g><g id="windNeedle"><path d="M80 4L89 24L80 20L71 24Z" fill="#80ddd0"/><path d="M80 156L86 141L80 144L74 141Z" fill="#80ddd0" opacity=".35"/></g></svg><div class="compass-value"><b id="windSpeed">—</b><small>mph<span id="windKmh">— km/h</span></small></div></div><p class="wind-caption">FROM <b id="windDirection">—</b> <span id="windDegrees">—</span></p><p class="beaufort-caption" id="beaufortWind" title="Beaufort from a ten-minute mean wind speed. Gusts are excluded and sensor height is not corrected.">Beaufort —</p><small class="beaufort-mean" id="windMean10m">10-min mean unavailable</small><p class="gust-caption">Gusts <b id="windGust">— mph</b></p><p class="daily-gust-caption" title="Highest wind gust since your station’s daily reset">Daily max gust <b id="dailyMaxGust">— mph</b><small id="dailyMaxGustKmh">— km/h</small></p></div>
         </div>
         <div class="card-metrics"><div><span class="metric-label">DEW POINT</span><strong id="dewPoint">—</strong><small id="dewPointC">—</small></div><div><span class="metric-label">HUMIDITY</span><strong id="humidity">—</strong><small>relative humidity</small></div><div><span class="metric-label" id="pressureLabel">Relative pressure</span><strong id="pressure">—</strong><small id="pressureTrend">Building history</small></div><div><span class="metric-label">TODAY’S RAIN</span><strong id="dailyRain">—</strong><small id="dailyRainMm">—</small><small class="rain-rate"><span id="rainRateLabel">Rate</span> <b id="rainHour">—</b></small><small id="dailyRainRecord" class="rain-record">Local record loading…</small></div></div>
         <div class="share-rain-strip" id="shareRainStrip"><span id="shareEvent">Event —</span><span id="shareWeek">Week —</span><span id="shareMonth">Month —</span><span id="shareYear">Year —</span></div>
@@ -72,7 +72,7 @@
   <p class="calendar-status" id="calendarStatus" role="status">Loading daily temperatures…</p><p class="calendar-source" id="calendarSource"></p><div class="calendar-archive-actions"><button type="button" id="calendarToday" class="text-button">Current month ↗</button><button type="button" id="climateArchiveBtn" class="text-button">Climate archive ↗</button></div>
 </section></div>
 <div class="share-toolbar"><p>Your weather postcard <span>·</span> Screen refresh 1 min <span>·</span> Radar refresh 5 min</p><div><button class="button subtle" id="copyBtn">Copy weather text</button><button class="button primary" id="saveCardBtn">↓ Save weather card</button></div></div><p class="weather-source-note" id="weatherSourceNote" hidden></p><p id="shareHelp" class="share-help" hidden>This view is ready for a screenshot. Save weather card downloads a PNG with the observation time.</p>
-<section class="overview-panels" id="detailsPanels" aria-label="Rainfall, sky and coastal conditions"><article class="panel rain-panel"><div class="panel-heading"><div><p class="eyebrow rain-reference-heading" id="rainReferenceNote">LOCAL NORMALS · LOADING…</p><h3>Rainfall ledger</h3></div><button id="publicRainDetailsBtn" type="button" class="text-button" hidden>Gauge details ↗</button></div>
+<section class="overview-panels" id="detailsPanels" aria-label="Rainfall, sky and coastal conditions"><article class="panel rain-panel"><div class="panel-heading"><div><p class="eyebrow rain-reference-heading" id="rainReferenceNote">LOCAL NORMALS · LOADING…</p><h3>Rainfall ledger</h3></div><div class="rain-since" id="rainSinceRow" tabindex="0" role="note"><span>Since recorded rain<small id="rainSinceSource">Waiting for observations</small></span><strong id="rainSince">—</strong></div><button id="publicRainDetailsBtn" type="button" class="text-button" hidden>Gauge details ↗</button></div>
 <div class="rain-totals">
 <div><span>This event</span><strong id="rainEvent">—</strong><small id="rainEventMm">—</small></div>
 <div><span>This week</span><strong id="rainWeek">—</strong><small id="rainWeekMm">—</small></div>
@@ -81,6 +81,7 @@
 </div><p id="rainGaugeSource" class="rain-gauge-source" hidden></p></article><article class="panel sky-panel">
 <div class="panel-heading"><div><p class="eyebrow">THE DAILY SKY</p><h3>Sun &amp; Moon</h3></div><span class="panel-symbol" aria-hidden="true">☼ ☾</span></div>
 <div class="sky-summary"><div class="sun-arc" aria-hidden="true"><svg viewBox="0 0 300 105"><path d="M25 94Q150-50 275 94" fill="none" stroke="#8095a6" stroke-width="2" stroke-dasharray="4 5"/><path d="M25 94H275" stroke="#8095a6" stroke-width="1"/><circle id="sunArcDot" cx="25" cy="94" r="7" fill="#ebd4a4"/></svg></div><div class="moon-overview"><svg id="moonDisc" viewBox="0 0 100 100" aria-hidden="true"><defs><clipPath id="moonClip"><circle cx="50" cy="50" r="38"/></clipPath></defs><circle cx="50" cy="50" r="38" fill="#243747"/><path id="moonLit" fill="#d5dfec" clip-path="url(#moonClip)"/></svg><div><strong id="moonPhase">—</strong><span id="moonIllumination">— illuminated</span></div></div></div>
+<div class="twilight-now"><span>SKY NOW</span><strong id="twilightStage">Calculating…</strong></div>
 <div class="sky-times"><div><span>↗ SUNRISE</span><strong id="sunrise">—</strong></div><div><span>SUNSET ↘</span><strong id="sunset">—</strong></div><div><span>↗ MOONRISE</span><strong id="moonrise">—</strong></div><div><span>MOONSET ↘</span><strong id="moonset">—</strong></div></div>
 <div class="mini-values"><div><span>Solar radiation</span><b id="solarValue">—</b></div><div><span>UV index</span><b id="uvValue">—</b></div><div><span>Daylight</span><b id="dayLength">—</b></div></div>
 <p class="panel-footnote" id="astroNote">Astronomical estimates · local time · approximate horizon.</p></article>

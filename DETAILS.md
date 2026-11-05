@@ -1,4 +1,4 @@
-# Weather Desk UK & Ireland — build UK13
+# Weather Desk UK & Ireland — build UK14
 
 A separate local UK edition, using port **8766** alongside the US edition's 8765.
 The weather postcard, radar, beacon, calendar, historical comparisons, coastal
@@ -490,3 +490,54 @@ Official API references:
 - https://www.wunderground.com/pws-api/observations/current-conditions
 - https://developer.weather.com/docs/openapi/pws-recent-history-1-day-rapid-2-0
 - https://madis.ncep.noaa.gov/madis_cwop.shtml
+
+## Twilight, time since rain, and ten-minute Beaufort
+
+The Sun & Moon card now shows the current sky stage: Daylight, Civil twilight,
+Nautical twilight, Astronomical twilight, or Night. Twilight also says dawn or
+dusk. Stages use the calculated geometric solar altitude at the saved location
+and the current time: apparent sunrise/set at approximately −0.833°, then
+−6°, −12° and −18°. Cloud cover does not change the astronomical stage. The
+calculation works when a weather station is disconnected and at polar locations.
+
+The rainfall heading shows elapsed 24-hour days since recorded rain. A connected
+Ambient station uses its reported lastRain timestamp when available. A native
+rain timestamp may include seconds while an Ambient observation is rounded to
+the minute. Public UK/Ireland ledgers use their same named EA or Met Éireann
+rain gauge and validated interval history. Other public sources retain observed
+wet bounds and continuous dry coverage per station in the private folder.
+Any positive measured amount counts at that source's reporting resolution;
+forecast/radar rain and missing observations do not count as measured rainfall.
+
+An approximate sign means the last rain was bounded by a reporting interval.
+A ≥ sign means only a minimum dry period is supported; earlier rainfall or gaps
+prevent an exact date. The counter ends at its observation/gauge coverage time,
+so it does not accumulate unobserved dry days while a source is offline. Hover
+or focus the rain-age badge for its source, last wet time and coverage. Cached
+station choices and source changes never share rain histories.
+
+Beaufort now uses a ten-minute scalar mean, excluding gusts, with no correction
+for sensor height. The compass continues showing the latest reported wind.
+Ambient's windspdmph_avg10m is preferred. Weather Underground's documented
+current ten-minute mean and UK/Ireland METAR ten-minute convention are used
+where supplied. The Met Éireann hourly wind_speed_mean is a one-hour mean;
+its Beaufort input is separately calculated from ten complete, consecutive
+one-minute wind_speed means at the selected station. A missing/rejected minute
+prevents that calculation. Its source and window end are retained.
+
+Where there is no native ten-minute mean, a time-weighted scalar estimate may
+be calculated from at least three actual reports covering the whole ten-minute
+window, with no gap over 5½ minutes. It is explicitly labelled an estimate.
+CWOP requests a small 20-minute history only around the selected station, with
+per-variable QC and station/location checks. A station reporting every fifteen
+minutes cannot establish a ten-minute mean: Beaufort stays unavailable rather
+than using its instantaneous wind or gust. Screen, copied report and PNG use
+the same mean-based Beaufort calculation.
+
+References:
+- https://aa.usno.navy.mil/faq/RST_defs
+- https://www.met.ie/forecasts/marine-inland-lakes/beaufort-scale
+- https://ambientweather.com/support/aw-misc/
+- https://www.caa.co.uk/publication/download/12602
+- https://opendata2.met.ie/edr/collections/observations-swob-nrt-1min?f=json
+- https://opendata2.met.ie/edr/collections/observations-swob-nrt-60min?f=json

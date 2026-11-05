@@ -22,6 +22,7 @@ from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 from timezones import local_date, midnight
 from weather_location import distance_km
+from rain_since import interval_rain_since
 
 BASE = "https://environment.data.gov.uk/hydrology"
 UTC = dt.timezone.utc
@@ -199,6 +200,7 @@ def totals(rows, now):
         "stale": now - end > 7200,
         "note": NOTE,
         "dayStart": int(day_start),
+        "rainSince": interval_rain_since(rows, 900, now),
     }
 
 
@@ -261,10 +263,10 @@ class UKRain:
                         "SELECT stamp,value,quality FROM readings WHERE measure=? AND stamp>=?",
                         (
                             value["measure"],
-                            midnight(
+                            min(now-370*86400, midnight(
                                 local_date(now, zone="Europe/London").replace(month=1, day=1),
                                 "Europe/London",
-                            ),
+                            )),
                         ),
                     )
                 }
@@ -340,7 +342,7 @@ class UKRain:
                     }
                 measure = current["measure"]
                 today = local_date(zone="Europe/London")
-                start = midnight(today.replace(month=1, day=1), "Europe/London")
+                start = min(midnight(today.replace(month=1, day=1), "Europe/London"), time.time()-30*86400)
                 with self.connect() as db:
                     last = db.execute(
                         "SELECT max(stamp) FROM readings WHERE measure=? AND stamp>=?",

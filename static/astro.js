@@ -146,9 +146,20 @@
       moon: crossings(start, end, lat, lon, moon, 0.133),
       illumination: illumination(t),
       sunAltitude: altitude(t, lat, lon, sun),
+      twilight: twilight(t, lat, lon),
       start,
       end,
     };
   }
-  window.WeatherAstro = { calculate, zonedMidnight, altitude, sun, moon };
+  function twilight(t, lat, lon) {
+    const elevation = altitude(t, lat, lon, sun);
+    const stage = elevation >= -0.8333 ? "Daylight"
+      : elevation >= -6 ? "Civil twilight"
+      : elevation >= -12 ? "Nautical twilight"
+      : elevation >= -18 ? "Astronomical twilight" : "Night";
+    const phase = stage.includes("twilight")
+      ? (altitude(t + 60000, lat, lon, sun) >= altitude(t - 60000, lat, lon, sun) ? "dawn" : "dusk") : null;
+    return { stage, phase, sunAltitude: elevation };
+  }
+  window.WeatherAstro = { calculate, zonedMidnight, altitude, sun, moon, twilight };
 })();

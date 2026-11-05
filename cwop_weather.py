@@ -70,14 +70,15 @@ def fetch_xml(url):
     return data
 
 
-def query_url(latitude, longitude, *, pressure_time=None):
-    dy = RADIUS_KM / 111.0
+def query_url(latitude, longitude, *, pressure_time=None, wind_time=None):
+    target = pressure_time if pressure_time is not None else wind_time
+    dy = (1 if wind_time is not None else RADIUS_KM) / 111.0
     dx = dy / max(0.15, math.cos(math.radians(latitude)))
     params = [
-        ("time", dt.datetime.fromtimestamp(pressure_time, dt.timezone.utc).strftime("%Y%m%d_%H%M") if pressure_time is not None else "0"),
-        ("minbck", "-30" if pressure_time is not None else "-89"),
+        ("time", dt.datetime.fromtimestamp(target, dt.timezone.utc).strftime("%Y%m%d_%H%M") if target is not None else "0"),
+        ("minbck", "-20" if wind_time is not None else "-30" if pressure_time is not None else "-89"),
         ("minfwd", "0"),
-        ("recwin", "3"),
+        ("recwin", "4" if wind_time is not None else "3"),
         ("timefilter", "0"),
         ("dfltrsel", "1"),
         ("stasel", "0"),
@@ -135,7 +136,7 @@ def numeric(value, minimum, maximum):
         return None
 
 
-def parse_reports(xml, latitude, longitude, feels_like, now=None, *, require_rain=False):
+def parse_reports(xml, latitude, longitude, feels_like, now=None, *, require_rain=False, keep_all=False):
     """Keep QC decisions per variable and complete observation timestamps separate."""
     now = time.time() if now is None else now
     if isinstance(xml, str):
@@ -236,6 +237,10 @@ def parse_reports(xml, latitude, longitude, feels_like, now=None, *, require_rai
             }
         )
     # A station may appear more than once. Only its latest complete report competes.
+    if keep_all:
+        for row in candidates:
+            row.pop("_distance")
+        return sorted(candidates, key=lambda row: row["current"]["timestamp"])
     latest = {}
     for row in candidates:
         previous = latest.get(row["stationId"])
@@ -293,7 +298,8 @@ class PreferredPublicWeather:
                     needs_archive = (cached.get("current", {}).get("pressureHpa") is not None
                                      and (cached.get("trend") or {}).get("delta") is None
                                      and not cached.get("pressureArchiveCheckedAt"))
-                    state["checked"] = -math.inf if self.force_refresh or needs_archive else time.monotonic() - min(age, 600)
+                    needs_wind = cached.get("current", {}).get("windMph") is not None and cached.get("metricsVersion") != 1
+                    state["checked"] = -math.inf if self.force_refresh or needs_archive or needs_wind else time.monotonic() - min(age, 600)
             except (OSError, ValueError, TypeError):
                 pass
             self.states[key] = state
@@ -435,6 +441,9 @@ class PreferredPublicWeather:
         points[current["timestamp"]] = current
         points = [points[t] for t in sorted(points)]
         chosen.update(locationKey=key, points=points, trend=self.trend(current, points), fetchedAt=time.time())
+        chosen["metricsVersion"] = 1
+        if same_station:
+            chosen["windHistory"] = previous.get("windHistory", [])
         if same_station and previous.get("current", {}).get("pressureKind") == current.get("pressureKind"):
             for field in ("pressureArchiveCheckedAt", "pressureHistoryNote"):
                 if field in previous:
@@ -489,6 +498,22 @@ class PreferredPublicWeather:
             if notes:
                 chosen["publicSourceNote"] = " ".join(notes)
             current = chosen["current"]
+            if chosen["source"] == "cwop" and current.get("windMph") is not None:
+                chosen["windHistoryLoading"] = True
+                if not self._install(key, state, copy.deepcopy(chosen)):
+                    return
+                try:
+                    reports = parse_reports(self.fetch(query_url(chosen["latitude"], chosen["longitude"], wind_time=current["timestamp"])),
+                        chosen["latitude"], chosen["longitude"], self.feels_like,
+                        now=current["timestamp"], keep_all=True)
+                    chosen["windHistory"] = [row["current"] for row in reports
+                        if row["stationId"] == chosen["stationId"]
+                        and distance_km(row["latitude"], row["longitude"], chosen["latitude"], chosen["longitude"]) <= 1
+                        and current["timestamp"]-1200 <= row["current"]["timestamp"] <= current["timestamp"]]
+                except Exception:
+                    chosen["windHistoryNote"] = "Recent CWOP wind reports could not be retrieved. Ten-minute means require sufficient actual reports."
+                finally:
+                    chosen["windHistoryLoading"] = False
             identity = (chosen["source"], chosen["stationId"], current.get("pressureKind"))
             if (current.get("pressureHpa") is not None and chosen["trend"].get("delta") is None
                     and time.time() - chosen.get("pressureArchiveCheckedAt", -math.inf) >= 1800

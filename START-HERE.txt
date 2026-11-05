@@ -1,4 +1,4 @@
-WEATHER DESK UK - BUILD UK13
+WEATHER DESK UK - BUILD UK14
 
 UPDATING: close the old console and keep the old folder as a backup.
 Extract this ZIP into a new folder. Copy your matching edition's
@@ -44,6 +44,12 @@ Optional Weather Underground data API key: Settings > More nearby personal stati
 CWOP remains available without a key. Your connected Ambient station keeps priority.
 Earlier pressure is now recalled from the selected station where available,
 then saved locally. Keep the private folder when updating.
+
+NEW IN THIS BUILD
+Sun & Moon shows the current twilight stage.
+The rainfall heading shows days since recorded rain (hover for source/time).
+Beaufort uses a ten-minute mean; sparse wind data remains unavailable.
+Keep this edition's private folder when updating to retain rain history.
 
 NETWORK ACCESS (optional): double-click START-WEATHER-DESK-UK-LAN.bat instead.
 The console lists addresses like http://192.168.1.50:8766/ to open from other

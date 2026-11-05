@@ -10,7 +10,7 @@ everything you save stays on your machine.
 
 **A collaboration between Shannon (KC1OHT) and Robert (KA6RTL).**
 
-> **Edition:** UK & Ireland, build UK13. There is also a
+> **Edition:** UK & Ireland, build UK14. There is also a
 > [US edition](https://github.com/geekmoto13/weather-desk). The two use different
 > ports (8766 here, 8765 there), so you can run both side by side.
 screenshot here: ![Screenshot](docs/screenshot.png)
@@ -42,7 +42,14 @@ screenshot here: ![Screenshot](docs/screenshot.png)
 - **Coastal tides**: a 24-hour chart from the nearest reporting Environment
   Agency tide gauge (and Irish coastal levels), in metres relative to Ordnance
   Datum Newlyn, with a link to Admiralty EasyTide for future tide times.
-- **Sun and Moon** for your location.
+- **Sun and Moon** for your location. The card also shows the current twilight
+  stage: daylight, civil, nautical or astronomical twilight, or night, with dawn
+  or dusk.
+- **Days since rain** in the rainfall heading, from your station's own last-rain
+  time or from the named gauge's measured rainfall. Forecast and radar rain never
+  count.
+- **Beaufort wind force** from a ten-minute mean wind speed (no correction for
+  sensor height). It shows unavailable when there is not enough wind data.
 - **Lightning nearby** from EUMETSAT's Meteosat Lightning Imager. This is optional
   and uses a free EUMETSAT account's key and secret, entered in Settings.
 - **Radio & Space**: NOAA SWPC space weather and KC2G propagation maps and circuit
@@ -180,8 +187,8 @@ docker compose pull
 docker compose up -d
 ```
 
-Your settings and history live in the `weather-desk-uk-data` volume and survive
-updates. Do not delete the volume, or run `docker compose down -v`, unless you
+Your settings, history and rain-since records live in the `weather-desk-uk-data`
+volume and survive updates. Do not delete the volume, or run `docker compose down -v`, unless you
 want to start over. In Portainer, leave "remove associated volumes" unticked.
 
 ### Docker notes
@@ -295,3 +302,4 @@ Released under the MIT License. See [`LICENSE`](LICENSE).
 Questions and bug reports are welcome as GitHub issues on this repository.
 This is a hobby project maintained on a best-effort basis, so replies may
 take a few days. Please include your edition, how you run it (Windows, Docker
+or Python) and any error text. Never post your `private/` folder or API keys.

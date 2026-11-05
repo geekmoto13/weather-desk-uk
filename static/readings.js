@@ -133,6 +133,44 @@
       )
       .map(([key, period]) => ({ period, mm: current[key] }));
   }
+  function windMean10m(current, history = []) {
+    const speed = (v) => finite(v) && v >= 0 && v <= 400;
+    if (!finite(current?.timestamp)) return { mph: null, reason: "No dated wind observation." };
+    if (speed(current.windMean10mMph)) return {
+      mph: current.windMean10mMph, estimated: false,
+      source: current.windMean10mSource || "Station-reported ten-minute mean", samples: null,
+      timestamp: current.windMean10mTimestamp || current.timestamp,
+    };
+    if (!speed(current.windMph)) return { mph: null, reason: "No usable wind speed in the current report." };
+    const end = current.timestamp, start = end - 600, rows = new Map();
+    for (const row of [...history, current]) {
+      if (finite(row?.timestamp) && row.timestamp >= start - 330 && row.timestamp <= end && speed(row.windMph))
+        rows.set(row.timestamp, row.windMph);
+    }
+    const points = [...rows].sort((a, b) => a[0] - b[0]);
+    const left = points.filter(([t]) => t <= start).at(-1);
+    if (!left || points.length < 3 || points.at(-1)?.[0] !== end)
+      return { mph: null, reason: "A full ten-minute history with at least three wind reports is needed." };
+    let area = 0, covered = 0, samples = 0;
+    for (let i = 1; i < points.length; i++) {
+      const [t0, v0] = points[i-1], [t1, v1] = points[i];
+      if (t1 <= start) continue;
+      if (t1-t0 > 330) return { mph: null, reason: "Wind reports are too far apart to estimate a ten-minute mean." };
+      const a = Math.max(start, t0), b = Math.min(end, t1);
+      if (b <= a) continue;
+      const va = v0 + (v1-v0) * (a-t0)/(t1-t0), vb = v0 + (v1-v0) * (b-t0)/(t1-t0);
+      area += (va+vb)/2 * (b-a); covered += b-a; samples++;
+    }
+    return covered === 600 && samples >= 2
+      ? { mph: area/600, estimated: true, source: "Time-weighted scalar estimate from saved reports", samples: samples+1 }
+      : { mph: null, reason: "The ten-minute wind window has missing observations." };
+  }
+  function rainSinceText(value) {
+    if (!finite(value?.seconds) || !["known", "at_least"].includes(value.status)) return "Awaiting rain history";
+    const days = Math.floor(value.seconds / 86400), hours = Math.floor(value.seconds % 86400 / 3600);
+    const prefix = value.status === "at_least" ? "≥ " : value.approximate ? "≈ " : "";
+    return prefix + (days ? `${days} day${days === 1 ? "" : "s"}` : `${hours}h · 0 days`);
+  }
   function publicLabels(source) {
     const name =
       source === "wunderground" ? "WEATHER UNDERGROUND" : source === "met-eireann"
@@ -161,6 +199,8 @@
     beaufort,
     withYearRain,
     reportedRain,
+    windMean10m,
+    rainSinceText,
     publicLabels,
     rainLedgerNote,
   };

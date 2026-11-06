@@ -6,6 +6,8 @@ A separate local UK edition, using port **8766** alongside the US edition's 8765
 The weather postcard, radar, beacon, calendar, historical comparisons, coastal
 tides and Radio & Space retain their existing layout and features.
 
+screenshot here: ![Screenshot](docs/screenshot.png)
+
 ## Dingle tide and source-label update
 
 Irish coastal levels now locate a reporting gauge using a small recent query,

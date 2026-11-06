@@ -1,0 +1,37 @@
+/* A quiet Radio Ham wink, with the longer conversation behind one button. */
+.rain-panel .tokyo-call {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  margin-top: 8px;
+  padding: 5px 0 0;
+  border-top: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  font-size: 10px;
+  line-height: 1.4;
+}
+.tokyo-call > span { display: flex; align-items: center; gap: 6px; }
+.tokyo-call i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none; }
+.tokyo-call strong { color: var(--mint); font-size: inherit; font-weight: 500; text-align: right; }
+.tokyo-call[data-state="rain"] i { color: #72c4ff; box-shadow: 0 0 6px #72c4ff66; }
+.tokyo-call[data-state="stale"] strong,
+.tokyo-call[data-state="unavailable"] strong { color: var(--muted); }
+.tokyo-call:hover strong { text-decoration: underline; text-underline-offset: 3px; }
+.tokyo-dialog { width: min(480px, calc(100vw - 32px)); }
+.tokyo-dialog .dialog-body { padding-bottom: 24px; }
+.tokyo-dialog .tokyo-wink { color: var(--muted); font-size: 12px; margin: 0 0 18px; }
+.tokyo-dialog .tokyo-answer { font-size: 24px; line-height: 1.3; color: var(--mint); margin: 0 0 15px; }
+.tokyo-dialog .tokyo-station { font-size: 13px; margin-bottom: 4px; }
+.tokyo-dialog .tokyo-meta { font-size: 12px; color: var(--muted); margin: 4px 0; }
+.tokyo-dialog .tokyo-report { padding: 10px 12px; margin-top: 16px; background: #07172566; border-radius: 6px; }
+.tokyo-dialog .tokyo-report summary { cursor: pointer; color: var(--mint); font-size: 11px; }
+.tokyo-dialog .tokyo-report p { font-family: var(--mono, monospace); font-size: 11px; overflow-wrap: anywhere; }
+.tokyo-dialog .tokyo-note { margin-top: 16px; font-size: 11px; color: var(--muted); line-height: 1.6; }
+@media (min-width: 1280px) and (max-width: 1599px) {
+  .overview-panels > .rain-panel { height: auto; min-height: 280px; }
+}

@@ -1,3 +1,26 @@
+# Validation — version 1.2
+
+- Version 1.2 re-applies the optional home-network (LAN) mode to the current build. No other functional change.
+- Default start is unchanged (127.0.0.1 only). With --lan, private-network IP addresses and this computer's name are accepted; other host names and public IPs are still refused (checked over HTTP).
+- Existing Python tests pass.
+
+## Previous release validation
+
+# Validation — UK15
+
+- 339 Python tests and 84 JavaScript tests passed, including the existing
+  station, rainfall, climate and launcher regression suites. Python 3.10 syntax
+  and modified JavaScript syntax passed.
+- All allowlisted assets and HTML IDs passed local HTTP checks.
+- The release package is CRC/hash checked and startup is checked with isolated
+  installed Python from an unrelated working directory. The existing bundled
+  runtime and launchers are unchanged. Native Windows runtime and visual browser
+  testing remain unverified in this Linux session.
+- No credentials, personal settings, downloaded weather reports or QA captures
+  are included in this release.
+
+## Previous release validation
+
 # Validation — UK14
 
 - 325 Python and 78 JavaScript checks pass. New tests cover native

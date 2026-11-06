@@ -38,6 +38,7 @@ from annual_rain import AnnualRain
 from historical_days import HistoricalDays, canonical_zone, finite, validate_day
 from local_store import SavedStationError, StationStore
 from rain_since import RainMemory, rain_time
+from tokyo_rain import TokyoRain
 from lightning import LightningDesk, LightningError
 from uk_location import LocationResolver
 from uk_sources import UKPublicWeather as PublicWeather, UKForecast, UKWarnings, RadarData
@@ -58,7 +59,7 @@ from ireland_tides import IrishTides
 
 ROOT = Path(__file__).resolve().parent
 UTC = dt.timezone.utc
-BUILD = "UK14"
+BUILD = "UK15"
 DEFAULTS = {
     "title": "Weather Desk UK & Ireland",
     "location": "Swadlincote, Derbyshire",
@@ -74,6 +75,8 @@ DEFAULTS = {
 }
 
 ASSETS = {
+    "/tokyo.js": ("tokyo.js", "text/javascript; charset=utf-8"),
+    "/tokyo.css": ("tokyo.css", "text/css; charset=utf-8"),
     "/public-stations.js": ("public-stations.js", "text/javascript; charset=utf-8"),
     "/h5wasm.js": ("h5wasm.js", "text/javascript; charset=utf-8"),
     "/lightning-data.js": ("lightning-data.js", "text/javascript; charset=utf-8"),
@@ -391,6 +394,7 @@ class Desk:
         self.location_choices = {}
         self.wunderground = WundergroundWeather(self.data_dir, feels_like)
         self.rain_memory = RainMemory(self.data_dir)
+        self.tokyo_rain = TokyoRain(lambda url: fetch_json(url))
         self.public_weather = PreferredPublicWeather(
             self.data_dir,
             PublicWeather(
@@ -1199,7 +1203,7 @@ class Desk:
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "WeatherDesk/1.0"
+    server_version = "WeatherDesk/1.2"
 
     def log_message(self, *_):
         pass  # Never log request bodies, keys, or upstream URLs.
@@ -1280,6 +1284,7 @@ class Handler(BaseHTTPRequestHandler):
                         return self.send_json({"error": str(exc)}, 400)
                 return self.send_json(self.server.desk.uk_midas.status())
             routes = {
+                "/api/tokyo-rain": self.server.desk.tokyo_rain.get,
                 "/api/public-stations": self.server.desk.public_station_connection,
                 "/api/lightning": self.server.desk.lightning,
                 "/api/radio": self.server.desk.radio,

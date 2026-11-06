@@ -8,32 +8,34 @@
   <title>Weather Desk UK &amp; Ireland</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/desktop.css?v=UK14">
-  <link rel="stylesheet" href="/climate.css?v=UK14">
-  <script src="/astro.js?v=UK14" defer></script>
-  <script src="/design.js?v=UK14" defer></script>
-  <script src="/climate.js?v=UK14" defer></script>
-  <script src="/readings.js?v=UK14" defer></script>
-  <link rel="stylesheet" href="/alerts.css?v=UK14">
-  <script src="/alerts.js?v=UK14" defer></script>
-  <link rel="stylesheet" href="/past.css?v=UK14">
-  <script src="/past.js?v=UK14" defer></script>
-  <link rel="stylesheet" href="/radio.css?v=UK14">
-  <script src="/radio.js?v=UK14" defer></script>
-  <link rel="stylesheet" href="/location.css?v=UK14">
-  <script src="/location.js?v=UK14" defer></script>
-  <script src="/calendar.js?v=UK14" defer></script>
-  <link rel="stylesheet" href="/uk.css?v=UK14">
-  <script src="/uk-radar.js?v=UK14" defer></script>
-  <script src="/uk-monthly.js?v=UK14" defer></script>
-  <link rel="stylesheet" href="/uk-data.css?v=UK14">
-  <script src="/uk-data.js?v=UK14" defer></script>
-  <link rel="stylesheet" href="/uk-tides.css?v=UK14">
-  <script src="/uk-tides.js?v=UK14" defer></script>
-  <link rel="stylesheet" href="/lightning.css?v=UK14">
-  <script src="/lightning.js?v=UK14" defer></script>
-  <script src="/public-stations.js?v=UK14" defer></script>
-  <script src="/app.js?v=UK14" defer></script>
+  <link rel="stylesheet" href="/desktop.css?v=UK15">
+  <link rel="stylesheet" href="/climate.css?v=UK15">
+  <script src="/astro.js?v=UK15" defer></script>
+  <script src="/design.js?v=UK15" defer></script>
+  <script src="/climate.js?v=UK15" defer></script>
+  <script src="/readings.js?v=UK15" defer></script>
+  <link rel="stylesheet" href="/alerts.css?v=UK15">
+  <script src="/alerts.js?v=UK15" defer></script>
+  <link rel="stylesheet" href="/past.css?v=UK15">
+  <script src="/past.js?v=UK15" defer></script>
+  <link rel="stylesheet" href="/radio.css?v=UK15">
+  <script src="/radio.js?v=UK15" defer></script>
+  <link rel="stylesheet" href="/location.css?v=UK15">
+  <script src="/location.js?v=UK15" defer></script>
+  <script src="/calendar.js?v=UK15" defer></script>
+  <link rel="stylesheet" href="/uk.css?v=UK15">
+  <script src="/uk-radar.js?v=UK15" defer></script>
+  <script src="/uk-monthly.js?v=UK15" defer></script>
+  <link rel="stylesheet" href="/uk-data.css?v=UK15">
+  <script src="/uk-data.js?v=UK15" defer></script>
+  <link rel="stylesheet" href="/uk-tides.css?v=UK15">
+  <script src="/uk-tides.js?v=UK15" defer></script>
+  <link rel="stylesheet" href="/lightning.css?v=UK15">
+  <script src="/lightning.js?v=UK15" defer></script>
+  <script src="/public-stations.js?v=UK15" defer></script>
+  <link rel="stylesheet" href="/tokyo.css?v=UK15">
+  <script src="/tokyo.js?v=UK15" defer></script>
+  <script src="/app.js?v=UK15" defer></script>
 </head>
 <body data-sky="night">
 <div class="page-shell">
@@ -78,7 +80,7 @@
 <div><span>This week</span><strong id="rainWeek">—</strong><small id="rainWeekMm">—</small></div>
 <div class="rain-period"><span>This month</span><strong id="rainMonth">—</strong><small id="rainMonthMm">—</small><span class="rain-normal">Calc. average to date <b id="monthNormal">—</b></span><span id="monthComparison" class="rain-comparison" data-comparison="unknown">Comparison loading…</span><div class="period-rain-records" id="monthRainRecords"><span class="rain-record-caption" id="monthRecordCaption">LOCAL · MONTH TO DATE</span><span class="period-record-line">MTD max <b id="monthWettest">Loading…</b></span><span class="period-record-line">MTD min <b id="monthDriest">Loading…</b></span></div></div>
 <div class="rain-period" id="yearRainPeriod"><span><button type="button" id="rainBreakdownBtn" class="rain-detail-button" aria-label="Year to date rainfall breakdown">Year to date ↗</button></span><strong id="rainYear">—</strong><small id="rainYearMm">—</small><span class="rain-normal">Calc. average to date <b id="yearNormal">—</b></span><span id="yearComparison" class="rain-comparison" data-comparison="unknown">Comparison loading…</span><div class="period-rain-records" id="yearRainRecords"><span class="rain-record-caption" id="yearRecordCaption">LOCAL · YEAR TO DATE</span><span class="period-record-line">YTD max <b id="yearWettest">Loading…</b></span><span class="period-record-line">YTD min <b id="yearDriest">Loading…</b></span></div></div>
-</div><p id="rainGaugeSource" class="rain-gauge-source" hidden></p></article><article class="panel sky-panel">
+</div><p id="rainGaugeSource" class="rain-gauge-source" hidden></p><button type="button" class="tokyo-call" id="tokyoCallBtn" aria-haspopup="dialog" aria-controls="tokyoDialog" aria-label="Is it raining in Tokyo? Open Tokyo report."><span><i aria-hidden="true"></i>Tokyo calling…</span><strong id="tokyoRainStatus">Tuning in…</strong></button></article><article class="panel sky-panel">
 <div class="panel-heading"><div><p class="eyebrow">THE DAILY SKY</p><h3>Sun &amp; Moon</h3></div><span class="panel-symbol" aria-hidden="true">☼ ☾</span></div>
 <div class="sky-summary"><div class="sun-arc" aria-hidden="true"><svg viewBox="0 0 300 105"><path d="M25 94Q150-50 275 94" fill="none" stroke="#8095a6" stroke-width="2" stroke-dasharray="4 5"/><path d="M25 94H275" stroke="#8095a6" stroke-width="1"/><circle id="sunArcDot" cx="25" cy="94" r="7" fill="#ebd4a4"/></svg></div><div class="moon-overview"><svg id="moonDisc" viewBox="0 0 100 100" aria-hidden="true"><defs><clipPath id="moonClip"><circle cx="50" cy="50" r="38"/></clipPath></defs><circle cx="50" cy="50" r="38" fill="#243747"/><path id="moonLit" fill="#d5dfec" clip-path="url(#moonClip)"/></svg><div><strong id="moonPhase">—</strong><span id="moonIllumination">— illuminated</span></div></div></div>
 <div class="twilight-now"><span>SKY NOW</span><strong id="twilightStage">Calculating…</strong></div>
@@ -148,5 +150,11 @@
 <dialog id="midasDialog" aria-labelledby="midasTitle"><div class="dialog-heading"><div><p class="eyebrow">MET OFFICE · MIDAS OPEN</p><h2 id="midasTitle">Your saved UK climate history</h2></div><button type="button" class="close-button" data-close="midasDialog" aria-label="Close MIDAS history">×</button></div><div class="dialog-body"><p id="midasImportStatus" role="status"></p><p id="midasEmpty">Start with the import instructions below. NOAA daily comparisons and the Met Office monthly card remain available while no MIDAS files are imported.</p><details class="archive-import" id="midasImportDetails"><summary>Import MIDAS files · one-time setup</summary><ol><li>Create a free CEDA account and open the <a href="https://catalogue.ceda.ac.uk/uuid/1854bb17ec454841b04e243a1352f25a/" target="_blank" rel="noopener noreferrer">daily temperature</a> or <a href="https://catalogue.ceda.ac.uk/uuid/88b5bdf6131e4c1cb7acb8bde984deda/" target="_blank" rel="noopener noreferrer">daily rainfall</a> dataset.</li><li>Under Explore, choose a station and <strong>qc-version-1</strong>. Download its yearly observation CSVs. For a 1991–2020 average, import those 30 years. Nearby Watnall is in Nottinghamshire, source ID 00556. Rainfall coverage may be much shorter than temperature coverage.</li><li>Select the downloaded CSVs together, or a ZIP containing them, then import. Files remain saved for the next startup. Repeat with additional years when needed.</li></ol><label for="midasFiles">Downloaded MIDAS observation files</label><br><input type="file" id="midasFiles" accept=".csv,.zip" multiple><br><button type="button" class="button primary" id="midasImportBtn">Import &amp; save history</button><p class="archive-small">Up to 300 files and 12 MB per import. Import observation CSVs only; metadata-only files are not observations. CEDA credentials are used on CEDA's website. This dashboard does not request or store them.</p></details><section id="midasExplorer" hidden><div class="archive-controls"><label>Imported station<select id="midasStation"></select></label><label>Observation-ending date<input id="midasDate" type="date" min="1850-01-01"></label></div><p id="midasViewStatus"></p><div class="archive-table-scroll"><table class="archive-table"><thead><tr><th>Metric</th><th>Selected period</th><th>1991–2020 calculated average</th><th>Prior-year extreme for this date</th></tr></thead><tbody id="midasDailyRows"></tbody></table></div><p id="midasFlags" class="archive-small"></p><h3>Selected year · complete months</h3><div class="archive-table-scroll"><table class="archive-table"><thead><tr><th>Month</th><th>Mean temperature</th><th>1991–2020 average</th><th>Rainfall</th><th>1991–2020 average rain</th><th>Prior-year wettest</th><th>Prior-year driest</th><th>Imported coverage</th></tr></thead><tbody id="midasMonthRows"></tbody></table></div><p id="midasYearRain"></p><p id="midasMethod" class="archive-small"></p></section><p class="archive-small">Data: Met Office MIDAS Open, NERC EDS Centre for Environmental Data Analysis. Current v202607 catalogue and citation links: <a href="https://doi.org/10.5285/1854bb17ec454841b04e243a1352f25a" target="_blank" rel="noopener noreferrer">Temperature DOI</a> · <a href="https://doi.org/10.5285/88b5bdf6131e4c1cb7acb8bde984deda" target="_blank" rel="noopener noreferrer">Rainfall DOI</a> · Open Government Licence v3.0. Older imported releases retain their release year in the saved archive.</p></div><div class="dialog-footer"><button class="button primary" data-close="midasDialog">Done</button></div></dialog>
 <dialog id="climateArchiveDialog" aria-labelledby="climateArchiveTitle"><div class="dialog-heading"><h2 id="climateArchiveTitle">Local climate archive</h2><button type="button" class="close-button" data-close="climateArchiveDialog" aria-label="Close climate archive">×</button></div><div class="dialog-body"><article class="panel monthly-panel"><div class="panel-heading"><div><p class="eyebrow" id="monthlyProvider">LOCAL · MONTHLY HISTORY</p><h3>Local climate archive</h3></div><span class="panel-symbol" aria-hidden="true">◷</span></div><p id="monthlyStation" class="monthly-station">Finding the nearest monthly station…</p><p id="monthlyPeriod" class="monthly-period">Full calendar month averages</p><div class="monthly-values"><div><small>MEAN TEMPERATURE</small><strong id="monthlyTemp">—</strong></div><div><small>RAINFALL</small><strong id="monthlyRain">—</strong></div></div><p id="monthlyLatest" class="panel-footnote">Calculated from 1991–2020 monthly observations</p><div class="archive-actions"><button id="monthlyDetailsBtn" type="button" class="text-button">Month-by-month comparison ↗</button><button id="midasOpenBtn" type="button" class="text-button">MIDAS history ↗</button></div><a id="monthlyOfficialLink" class="panel-link" href="https://www.metoffice.gov.uk/research/climate/maps-and-data/historic-station-data" target="_blank" rel="noopener noreferrer">Met Office source data ↗</a></article></div></dialog>
 <dialog id="ukTideDetails" aria-labelledby="ukTideDetailsTitle"><div class="dialog-heading"><h2 id="ukTideDetailsTitle">Coastal tide observations</h2><button type="button" class="close-button" data-close="ukTideDetails" aria-label="Close tide details">×</button></div><div class="dialog-body about-copy"><p id="ukTideDetailsStation"></p><p id="ukTideDatumNote">The curve shows the past 24 hours of measured, 15-minute mean coastal water levels, with gaps left blank. Heights are metres relative to Ordnance Datum Newlyn (m AOD). They are not heights above Chart Datum. Negative values are normal.</p><p>These observations do not predict the next high or low tide. Use the official Admiralty EasyTide link for future tide times and its own height datum.</p><p id="ukTideAttribution">this uses Environment Agency tide gauge data from the real-time data API (Beta)</p><p id="ukTideLicenseNote">Open Government Licence v3.0 · <a href="https://environment.data.gov.uk/flood-monitoring/doc/tidegauge" target="_blank" rel="noopener noreferrer">Official data documentation ↗</a></p></div></dialog>
+<dialog class="tokyo-dialog" id="tokyoDialog" aria-labelledby="tokyoTitle">
+<div class="dialog-heading"><div><p class="eyebrow">THE RADIO HAM</p><h2 id="tokyoTitle">Is it raining in Tokyo?</h2></div><button type="button" class="close-button" id="tokyoCloseBtn" aria-label="Close Tokyo report">×</button></div>
+<div class="dialog-body"><p class="tokyo-wink">A little nod to Tony Hancock — for the radio hams at this weather desk.</p>
+<p class="tokyo-answer" id="tokyoAnswer">Calling Tokyo…</p><p class="tokyo-station">Tokyo Haneda · RJTT</p><p class="tokyo-meta" id="tokyoObserved">Awaiting a Tokyo report</p><p class="tokyo-meta" id="tokyoTemperature">Temperature unavailable</p>
+<details class="tokyo-report"><summary>The message from Tokyo</summary><p id="tokyoReport">No report received yet.</p></details>
+<p class="tokyo-note">A live airport observation, refreshed every 10 minutes. Conditions elsewhere in Tokyo can differ; very light rain may go unreported. Tokyo stays live when you browse your local weather history.<br>Source: <a href="https://aviationweather.gov/api/data/metar?ids=RJTT&amp;format=json" target="_blank" rel="noopener noreferrer">NOAA Aviation Weather Center ↗</a></p></div></dialog>
 </body>
 </html>

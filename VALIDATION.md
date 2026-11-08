@@ -1,17 +1,73 @@
-# Validation — version 1.2
+# Validation — UK18
 
-- Version 1.2 re-applies the optional home-network (LAN) mode to the current build. No other functional change.
-- Default start is unchanged (127.0.0.1 only). With --lan, private-network IP addresses and this computer's name are accepted; other host names and public IPs are still refused (checked over HTTP).
-- Existing Python tests pass.
+- 343 Python tests and 94 JavaScript tests passed. New cases cover 48-hour
+  coverage, partial windows, missing values, valid zero, duplicates, stale data,
+  DST, native temperature/wind units and the extended regional provider feeds.
+- The user's existing Chrome page was inspected read-only. The old beacon main
+  area was only 27.7 px tall with a column layout, and the Tokyo button extended
+  below the ledger. The legacy wide-screen stacking rule is now restricted to
+  smaller layouts. The new beacon has a non-shrinking 104 px horizontal main
+  area; natural-height tracks and the ledger's content minimum prevent clipping.
+- The new overview places the radar over the outlook, giving the ledger and
+  Sun & Moon more vertical room. All original readings and source links remain.
+- Existing hourly feeds are reused. Live NOAA/NWS and Open-Meteo / DWD requests
+  each returned about 49 hours with temperature, wind and precipitation chances.
+  Met Éireann's public point-field names and documented units were verified.
+- HTML hierarchy, unique IDs, assets, JS syntax, CSS blocks and Python 3.10
+  compilation passed. ZIP CRC/hash and isolated installed-Python startup passed.
+  Runtime/launcher files are unchanged. No personal settings or QA data ship.
+- The new packaged layout is not yet visually verified on the user's Windows
+  screen. Source inspection of the old page is not a screenshot of the update.
+
+## Previous release validation
+
+# Validation — UK17
+
+- 339 Python and 84 JavaScript checks passed, including existing station,
+  rainfall, history, climate, saved-settings, map-data and launcher regressions.
+- Unique HTML IDs, wrapper/sidebar structure, native disclosure content and the
+  Tokyo episode link target/rel were checked. CSS block structure and modified
+  JavaScript syntax passed. The removed wide-screen sizing branch is superseded
+  by overview.css; all public assets are still referenced by UI/worker source.
+- At a 1920 × 1080 CSS viewport, the grid allocation calculates columns of about
+  638 / 664 / 255 / 255 px, a 720 px radar panel, a 476 px postcard and 232 px
+  small cards. These are CSS layout calculations, not a rendered screenshot.
+- A live browser preview could not connect to the workspace's local app. Actual
+  rendering on Chrome/Brave at native Windows display scaling is unverified.
+  Content is not clipped at the page level; unusually long warnings can scroll.
+- Release ZIP CRC/hash and isolated installed-Python startup checks passed.
+  Public assets were served through each packaged app. Bundled runtime and
+  launcher bytes are unchanged. No credentials or private app data are included.
+
+## Previous release validation
+
+# Validation — UK16
+
+- Rainy Tokyo reply changed to “Water wet… ew, nasty!” in both the rain-panel
+  line and its report dialog. Existing no-rain, stale and offline replies remain.
+- All six existing Tokyo UI-controller checks passed for this edition after
+  updating their expected rainy wording. Modified JavaScript syntax passed.
+- Package CRC and local served-asset checks passed. Weather-data logic and
+  bundled Python/runtime launchers are unchanged.
 
 ## Previous release validation
 
 # Validation — UK15
 
-- 339 Python tests and 84 JavaScript tests passed, including the existing
-  station, rainfall, climate and launcher regression suites. Python 3.10 syntax
-  and modified JavaScript syntax passed.
-- All allowlisted assets and HTML IDs passed local HTTP checks.
+- Tokyo “Radio Ham” Easter egg: 339 Python tests and 84 JavaScript
+  tests passed, including the existing station, rainfall, climate and launcher
+  regression suites. Python 3.10 syntax and modified JavaScript syntax passed.
+- New cases cover rain/drizzle, recent rain, forecast trends and remarks,
+  nearby showers, snow/ice, unidentified precipitation, malformed/missing
+  reports, timestamps, ten-minute caching, retry backoff and concurrent reads.
+- UI-controller checks cover Shannon’s exact “It is are not raining” reply,
+  JST time, temperature units, accessible button/dialog actions, single polling
+  setup, delayed reports and offline handling. Tokyo requires no station key or
+  local location, and does not enter the local observation/rainfall pipeline.
+- All allowlisted assets and HTML IDs passed local HTTP checks. Tokyo endpoint
+  rain, no-rain and failed-refresh responses were exercised through each server.
+- The NOAA AWC RJTT endpoint returned a live public Haneda report during QA.
+  A transient fetch also failed and remained unavailable rather than dry.
 - The release package is CRC/hash checked and startup is checked with isolated
   installed Python from an unrelated working directory. The existing bundled
   runtime and launchers are unchanged. Native Windows runtime and visual browser

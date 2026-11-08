@@ -1,0 +1,31 @@
+.forecast-outlook { overflow: visible; margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.outlook-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.outlook-heading h3 { margin: 0; font-size: 17px; }
+.outlook-heading .eyebrow { margin: 0 0 3px; font-size: 8px; }
+.outlook-status { margin: 0; font-size: 10px; color: var(--muted); line-height: 1.4; }
+.outlook-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 8px; flex: 1 0 auto; min-height: min-content; }
+.outlook-period { padding: 8px; min-width: 0; border: 1px solid var(--line); border-radius: 7px; background: #abcde709; }
+.outlook-period p { margin: 0; }
+.outlook-time { color: var(--muted); font-size: 9px; line-height: 1.4; }
+.outlook-condition { display: block; font-size: 11px; font-weight: 500; line-height: 1.35; margin: 4px 0; overflow-wrap: anywhere; }
+.outlook-temperature { color: var(--mint); font-size: 12px; line-height: 1.4; }
+.outlook-rain-wind { color: #c6dce8; font-size: 9px; line-height: 1.5; margin-top: 3px !important; }
+.outlook-period[data-status="partial"] { border-style: dashed; }
+.outlook-period[data-status="partial"] .outlook-condition { color: var(--muted); }
+.outlook-source { margin: 0; font-size: 8px; color: var(--muted); line-height: 1.4; }
+body.share-mode .forecast-outlook { display: none; }
+@media (min-width: 1600px) {
+  .forecast-outlook .outlook-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .forecast-outlook .eyebrow { display: none; }
+  .forecast-outlook h3 { font-size: 16px; line-height: 1.2; }
+  .forecast-outlook .outlook-status { font-size: 9px; line-height: 1.35; }
+}
+@media (max-width: 1100px) {
+  .outlook-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .outlook-condition { font-size: 12px; }
+}
+@media (max-width: 480px) {
+  .outlook-grid { grid-template-columns: 1fr; }
+  .outlook-heading { display: block; }
+  .outlook-status { margin-top: 5px; }
+}

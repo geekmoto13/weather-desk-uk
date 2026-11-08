@@ -1,6 +1,7 @@
 """Keyless UK forecast, real METAR observations, warnings and radar metadata."""
 
 from __future__ import annotations
+from forecast_values import numeric
 import copy
 import json
 import math
@@ -295,18 +296,23 @@ class UKForecast:
                 "models": "icon_seamless",
                 "timezone": "Europe/London",
                 "timeformat": "unixtime",
-                "forecast_days": 3,
-                "hourly": "weather_code,precipitation_probability",
+                "forecast_days": 4,
+                "temperature_unit": "fahrenheit",
+                "wind_speed_unit": "mph",
+                "hourly": "weather_code,precipitation_probability,temperature_2m,wind_speed_10m",
             }
             raw = self.fetch("https://api.open-meteo.com/v1/forecast?" + urlencode(params))
             now = time.time()
             h = raw["hourly"]
             rows = []
+            def sample(name, i, low, high):
+                values = h.get(name, [])
+                return numeric(values[i], low, high) if i < len(values) else None
             for i, start in enumerate(h["time"]):
                 if (
                     not isinstance(start, (int, float))
                     or start + 3600 <= now
-                    or start >= now + 86400
+                    or start >= now + 49 * 3600
                 ):
                     continue
                 code = h["weather_code"][i]
@@ -316,7 +322,9 @@ class UKForecast:
                         "start": start,
                         "end": start + 3600,
                         "summary": WEATHER.get(code, f"Unknown forecast code {code}"),
-                        "pop": number(chance[i]) if i < len(chance) else None,
+                        "pop": numeric(chance[i], 0, 100) if i < len(chance) else None,
+                        "tempF": sample("temperature_2m", i, -150, 180),
+                        "windMph": sample("wind_speed_10m", i, 0, 300),
                     }
                 )
             if not rows:

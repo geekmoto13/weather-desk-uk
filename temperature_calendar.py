@@ -1,4 +1,4 @@
-"""Completed local days compared with explicit NOAA 1991–2020 daily normals."""
+"""Completed local days, exact normal departures, and experimental daily thirds."""
 
 from __future__ import annotations
 import calendar
@@ -15,13 +15,7 @@ from climate import climate_value, require_rows
 from historical_days import fetch_station_day
 from local_store import write_private_json
 from timezones import local_date
-
-
-def temperature_class(mean, normal):
-    if mean is None or normal is None:
-        return "missing", None
-    delta = round(mean - normal, 4)
-    return ("above" if delta > 1 else "below" if delta < -1 else "at"), delta
+from temperature_terciles import METHOD, PERIOD, TemperatureTerciles, temperature_class
 
 
 def station_temperature(summary):
@@ -53,9 +47,10 @@ def station_temperature(summary):
 
 
 class TemperatureCalendar:
-    def __init__(self, directory, fetch):
+    def __init__(self, directory, fetch, baseline_fetch=None):
         self.directory = Path(directory) / "temperature-calendar"
         self.fetch = fetch
+        self.terciles = TemperatureTerciles(directory, fetch, baseline_fetch)
         self.lock = threading.RLock()
         self.states = {}
         self.selected = None
@@ -117,6 +112,11 @@ class TemperatureCalendar:
                             "meanF": None,
                             "normalF": None,
                             "departureF": None,
+                            "lowerThirdF": None,
+                            "upperThirdF": None,
+                            "baselineYears": None,
+                            "baselineExpectedYears": 8 if day.strftime("%m-%d") == "02-29" else 30,
+                            "baselineRequiredYears": 7 if day.strftime("%m-%d") == "02-29" else 24,
                             "note": (
                                 "Day in progress"
                                 if day == today
@@ -135,8 +135,11 @@ class TemperatureCalendar:
                         "stationId": site["id"],
                         "stationName": site["name"],
                         "source": "ambient" if station else "noaa",
-                        "normalPeriod": "1991–2020",
-                        "thresholdF": 1,
+                        "normalPeriod": PERIOD,
+                        "comparisonMethod": METHOD,
+                        "comparisonNote": "Experimental daily adaptation of historical thirds; not official NOAA daily categories.",
+                        "baselineError": None,
+                        "phase": "Loading daily observations and normals…",
                         "days": rows,
                         "completed": 0,
                         "total": sum(row["date"] < today.isoformat() for row in rows),
@@ -146,7 +149,7 @@ class TemperatureCalendar:
                 identity = hashlib.sha256(
                     "|".join((month, site["id"], zone, station)).encode()
                 ).hexdigest()[:32]
-                state["cachePath"] = self.directory / (identity + "-month.json")
+                state["cachePath"] = self.directory / (identity + "-terciles-v1-month.json")
                 try:
                     saved = json.loads(state["cachePath"].read_text())
                     if (
@@ -154,11 +157,13 @@ class TemperatureCalendar:
                         saved.get("stationId"),
                         saved.get("timezone"),
                         saved.get("source"),
-                    ) == (month, site["id"], zone, "ambient" if station else "noaa"):
+                        saved.get("comparisonMethod"),
+                    ) == (month, site["id"], zone, "ambient" if station else "noaa", METHOD):
                         cached = {
                             d["date"]: d
                             for d in saved.get("days", [])
                             if isinstance(d, dict) and d.get("status") in ("above", "at", "below")
+                            and temperature_class(d.get("meanF"), d.get("normalF"), d.get("lowerThirdF"), d.get("upperThirdF"))[0] == d["status"]
                         }
                         for day in rows:
                             if day["date"] < today.isoformat() and day["date"] in cached:
@@ -232,6 +237,23 @@ class TemperatureCalendar:
                 normal = climate_value(row[3])[0] if row else None
                 with self.lock:
                     day["normalF"] = normal
+            with self.lock:
+                state["payload"]["phase"] = "Loading 1991–2020 historical thirds…"
+            baseline = {}
+            baseline_error = None
+            try:
+                baseline = self.terciles.get(site)
+            except ValueError as exc:
+                baseline_error = str(exc)
+            if not active():
+                return
+            with self.lock:
+                state["payload"]["baselineError"] = baseline_error
+                state["payload"]["phase"] = "Loading completed daily observations…"
+                for day in state["payload"]["days"]:
+                    band = baseline.get(day["date"][5:])
+                    if band:
+                        day.update(band)
             for day in reversed(state["payload"]["days"]):
                 if not active():
                     return
@@ -298,10 +320,16 @@ class TemperatureCalendar:
                     low = climate_value(row[2])[0] if row else None
                     mean = (high + low) / 2 if high is not None and low is not None else None
                     if mean is None:
-                        error = "The UK daily archive has not reported this day yet; it can lag several weeks."
-                status, departure = temperature_class(mean, day["normalF"])
-                if day["normalF"] is None:
-                    error = "Calculated daily average unavailable."
+                        error = "The daily archive has not reported this day yet; it can lag several weeks."
+                status, departure = temperature_class(mean, day["normalF"], day["lowerThirdF"], day["upperThirdF"])
+                if mean is not None and status == "missing":
+                    error = baseline_error or (
+                        f"Historical thirds unavailable: {day['baselineYears'] or 0} of "
+                        f"{day['baselineExpectedYears']} reference years; at least "
+                        f"{day['baselineRequiredYears']} required."
+                    )
+                elif day["normalF"] is None and not error:
+                    error = "Daily normal unavailable; exact departure cannot be calculated."
                 if not active():
                     return
                 with self.lock:
@@ -338,3 +366,4 @@ class TemperatureCalendar:
                     pass
             with self.lock:
                 state["loading"] = False
+                state["payload"]["phase"] = None

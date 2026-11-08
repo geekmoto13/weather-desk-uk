@@ -1,12 +1,38 @@
 This build includes an Easter egg. Can you find it?
 
-# Weather Desk UK & Ireland — version 1.2 (build UK15)
+# Weather Desk UK & Ireland — version 1.3.0 (build UK20-test)
 
 A separate local UK edition, using port **8766** alongside the US edition's 8765.
 The weather postcard, radar, beacon, calendar, historical comparisons, coastal
 tides and Radio & Space retain their existing layout and features.
 
 screenshot here: ![Screenshot](docs/screenshot.png)
+
+## What's new in 1.3.0
+
+- **Network access is back.** Start the dashboard with `START-WEATHER-DESK-UK-LAN.bat` (or add `--lan`)
+  to open it from a phone or tablet on your home network. See **Network access
+  (optional)** at the end of this file. The normal start files remain local-only.
+- **Radio & Space has been rewritten.** It uses the full page width, with compact
+  HF and reception panels, a large propagation map, NOAA solar imagery and
+  measurement plots. HF forecasts are repaired, destinations can be picked by
+  name or prefix without a grid, there are two prediction models (KC2G and
+  VOACAP), and recent PSK Reporter reception reports are shown. Details are in
+  the **Radio & Space** section.
+- **Experimental temperature calendar.** Calendar colours now use the historical
+  middle third for each date instead of a fixed ±1°F band. Details are in
+  **Readings and comparisons**.
+- **Overview layout and 48-hour outlook.** The Berkeley beacon gets a larger,
+  horizontal building and text area. The smaller radar sits above a new 48-hour
+  forecast made of four rolling 12-hour windows. Each shows the prevailing
+  description, the range of hourly temperatures in °F/°C, the highest hourly
+  precipitation chance and the highest hourly wind speed. This is not a 12-hour
+  rain probability or a gust forecast. Missing numbers stay unavailable and
+  incomplete windows withhold ranges. The outlook is separate from station
+  readings and from the 12-hour beacon calculation. It uses NOAA/NWS hourly forecasts in the US, Open-Meteo / DWD ICON for UK locations and Met Éireann for Ireland. Met Éireann's current point feed has no probability field, so its precipitation chance stays unavailable.
+  The same cached feed serves the beacon and the outlook; no extra key is
+  needed. Large warnings or long source descriptions can make the page scroll
+  rather than clip content.
 
 ## Dingle tide and source-label update
 
@@ -157,7 +183,7 @@ to stop. Internet access is needed for weather feeds; saved history stays local.
 
 ## Startup implementation
 
-The three Windows shortcuts share **weather-desk.bat**. Its built-in PowerShell
+The Windows shortcuts share **weather-desk.bat**. Its built-in PowerShell
 command checks/extracts the included `runtime/python-windows-x64.zip` and verifies
 all 39 files before Python starts. Later launches reuse those files. Preparation
 does not access the network or change system PATH, registry or PowerShell policy.
@@ -300,11 +326,30 @@ high/low. Use the **Admiralty EasyTide** link for future tide times.
   are requested individually and saved. Missing data never contributes zero.
   The ledger's observed, normal and record windows all use the same cutoff date:
   month-to-date and **January 1 through today**. No June-to-June season is mixed in.
-- The completed-day temperature mean is **(daily high + daily low) / 2**. Red means
-  more than 1°F above the date's 1991–2020 normal; blue more than 1°F below; green
-  within ±1°F (±0.6°C), including endpoints. This band is an explicit dashboard
-  choice, not an official universal meteorological tolerance. Today, incomplete
-  days and future days stay uncoloured.
+- The completed-day temperature mean is **(daily high + daily low) / 2**.
+  The experimental calendar compares it with same-date 1991–2020 empirical
+  thirds: red above the 66⅔ percentile, blue below the 33⅓ percentile, green
+  between them (inclusive). Click a date for both cutoffs in °F/°C, the
+  reference-year count, the observed mean, the normal/calculated average and the
+  exact departure. This is an adaptation of
+  [NOAA CPC's outlook categories](https://www.cpc.ncep.noaa.gov/products/predictions/erf_info.php?outlook=814&var=t),
+  **not an official NOAA daily tolerance or a weather forecast**. For each
+  reference station and month/day, paired highs and lows give one daily mean per
+  year; the 1/3 and 2/3 quantiles use linear interpolation at `(n - 1) * p`
+  (Hyndman–Fan type 7). Ties can narrow the band, and neighbouring dates are
+  never substituted. At least 80% of the possible years need valid pairs: 24/30
+  ordinarily, 7/8 for February 29 (a smaller sample, explicitly labelled). That
+  threshold is our choice. Missing or accumulated observations, reversed
+  high/low pairs and duplicate dates are excluded. Colours use unrounded values;
+  the popup rounds for readability. Today, incomplete days and dates with
+  insufficient historical coverage stay uncoloured, and a positive departure
+  from normal can still be green, because a normal is a mean while the green
+  range describes the historical distribution. The first calendar load reads
+  the 30-year reference in the background and saves derived cutoffs in
+  `private/temperature-calendar/terciles`, isolated by station and method;
+  restarts reuse them and failed loads retry after five minutes. Colours from
+  the old ±1°F method are never imported, and history is never filled with
+  zeros. US records come from [RCC-ACIS](https://docs.rcc-acis.org/acisws/); the UK/Ireland edition reuses its named UK GHCN and Met Éireann climate archives, and its averages and thresholds remain explicitly calculated references.
 - Climate references and live observation stations are named separately. Nearby
   sites and reporting-day conventions can differ. NOAA precipitation includes
   liquid water and melted snow; an unheated personal gauge can miss snowfall.
@@ -329,34 +374,92 @@ an appropriate distribution feed instead of increasing viewer polling.
 
 ## Radio & Space
 
-The existing radio tab remains available. **NOAA SWPC** supplies SFI, daily
-sunspot number, planetary A, Kp, observed geomagnetic scale, solar-wind speed,
-Bz/Bt, GOES X-ray class, R/S/G scales, bulletins and D-layer absorption. Daily
-values show their observation date; they commonly describe the previous UTC day.
-Missing or stale values remain labelled, never converted to zero or an all-clear.
+The Radio & Space screen uses the available width: compact HF and reception
+panels, a large propagation map, and solar imagery and NOAA measurement plots.
 
-**KC2G** supplies the MUF/grey-line and foF2/NVIS maps plus circuit predictions
-for 10/12/15/17/20/30/40/60/80/160 m. MUF is for 3000 km hops; foF2 is a critical
-frequency for near-vertical paths. D-RAP shows absorption, not a continuous LUF.
-Map timestamps/legends remain intact. The lowest usable band is the lowest tested
-frequency reaching 50% predicted circuit reliability, not a measured continuous
-lowest usable frequency.
+**NOAA SWPC** supplies SFI, daily sunspot number, planetary A, Kp, observed
+geomagnetic scale, solar-wind speed, Bz/Bt, GOES X-ray class, R/S/G scales,
+bulletins and D-layer absorption. Daily values show their observation date; they
+commonly describe the previous UTC day. Missing or stale values remain labelled,
+never converted to zero or an all-clear. **KC2G** supplies the MUF/grey-line and
+foF2/NVIS maps. MUF is for 3000 km hops; foF2 is a critical frequency for
+near-vertical paths. D-RAP shows absorption, not a continuous LUF. Map
+timestamps and legends remain intact.
 
-Path setup saves destination/grid, mode, power, antenna gains and receiving-noise
-environment. Reliability columns cover now, +3 h and +6 h; SNR describes the first
-displayed hour. Hourly view shows the remaining model horizon. SSB assumptions are
-3000 Hz/6 dB, CW 500 Hz/0 dB and FT8 50 Hz/−3 dB. These are model assumptions,
-not operating-frequency recommendations or measured receiver reports. NOAA
-observations and KC2G/ITU-R path estimates are credited separately.
+- **HF forecasts repaired:** KC2G's live response has 25 columns. The previous
+  parser demanded exactly 24 and rejected every band. The 24 UTC positions are
+  now retained, with model-generation checks. Errors appear next to the table
+  instead of being hidden inside the model notes.
+- **No grid required for a listed destination:** 340 current DXCC entities and
+  511 regional locations are searchable by name or prefix. DXCC locations are
+  representative points; choose a city for a more specific path. Only the
+  Custom Maidenhead choice requires a locator. Your TX location is taken from
+  saved weather-station settings; the dashboard calculates its grid for you.
+- **Two automated prediction models:** KC2G uses its current ionospheric model
+  for circuit predictions on 10/12/15/17/20/30/40/60/80/160 m. VOACAP, via
+  HamClock.com's compatible service, gives typical monthly planning
+  probabilities. Select the model above the table or in Path setup. Context and
+  caches are kept separate by station, destination, mode, power and provider.
+  KC2G recalculates at most every 15 minutes per path; VOACAP once per hour.
+  Restarting can reuse fresh saved predictions.
+- **KC2G assumptions:** path setup saves destination, mode, power, antenna gains
+  and receiving-noise environment. Reliability columns cover now, +3 h and +6 h;
+  SNR describes the first displayed hour. SSB assumptions are 3000 Hz/6 dB, CW
+  500 Hz/0 dB and FT8 50 Hz/−3 dB. The lowest usable band is the lowest tested
+  frequency reaching 50% predicted circuit reliability, not a measured
+  continuous lowest usable frequency.
+- **VOACAP assumptions:** this backend requires whole-watt power (1–1500 W);
+  fractional watts remain available in KC2G. The nine-band protocol covers
+  80, 60, 40, 30, 20, 17, 15, 12 and 10 m, with fixed 0 dBi isotropic antennas
+  and a 3° minimum takeoff angle. Backend noise and mode SNR thresholds apply.
+  The service returns reliability, not SNR, and does not provide 160 m; those
+  fields stay blank with an explanation. KC2G's gain and noise controls are
+  disabled for VOACAP. Neither model guarantees a contact. Green/amber/red band
+  cells mean ≥75%, 50–74% and <50% modelled reliability; grey means unavailable.
+  These display bands are separate from NOAA's storm-severity colours.
+- **NOAA colours:** level 0 green, 1 yellow, 2 gold, 3 orange, 4 red, 5 dark red.
+  Current R/S/G, 24-hour maximums, forecast probabilities and forecast G are
+  separate. Missing or stale data is grey. Kp colours follow the G thresholds;
+  X-ray colours follow the corresponding instantaneous flare thresholds. SFI,
+  sunspots, solar wind and Bz keep their physical units rather than inventing
+  NOAA severity scales for them. The Kp forecast says partial when few forecast
+  intervals are available.
+- **NOAA imagery and plots:** switch between SUVI 195 Å, northern aurora and
+  CCOR-1 corona imagery (five-minute checks; original image times retained).
+  X-ray and proton plots use six hours of actual NOAA observations; Kp shows the
+  past 24 hours. Charts are plotted locally from NOAA JSON data, keep gaps, use
+  logarithmic axes for flux and show sample values on pointer hover. Unavailable
+  images or data have a clear status and an official product link.
+- **PSK Reporter:** recent digital reception reports for your station callsign,
+  or an override in Path setup. Shows receiving stations, band/mode and time,
+  with receiver grid, frequency and reported SNR in the tooltip. At most 100
+  reports from the last hour are requested. Queries are paced across callsigns
+  to at least five minutes, and the pacing survives restarts. This reads
+  reports; it does not transmit or submit spots. No reports does not mean a
+  band is closed, and digital reception is not proof of an SSB opening.
 
 The tab checks locally once a minute while open. Source caches range from two
-minutes to an hour; KC2G paths/maps refresh at 15 minutes, D-RAP at five minutes.
-Small public-feed caches and path preferences persist in private/radio/. Rounded
-coordinates and path parameters go to KC2G; Ambient keys/MAC do not.
+minutes to an hour; KC2G maps refresh at 15 minutes and D-RAP at five minutes.
+Small public-feed caches and path preferences persist in private/radio/. The
+selected HF provider receives approximate TX/RX coordinates and station model
+settings; PSK Reporter receives only the requested callsign. Ambient credentials
+and weather-station identifiers are never sent to radio providers. VOACAP
+Online's website is not scraped: its full controls open separately, with
+copyable generated grids for the same path. The automatic table uses a
+HamClock-compatible backend. For a self-hosted compatible service, optionally
+set `WEATHER_DESK_VOACAP_URL` to its HTTPS endpoint, or HTTP on localhost. Use
+community services for personal reference and respect their availability.
 
-Sources: https://www.spaceweather.gov/communities/radio-communications ·
-https://www.spaceweather.gov/products/d-region-absorption-predictions-d-rap ·
-https://prop.kc2g.com/ · https://prop.kc2g.com/acknowledgments/
+Sources: [NOAA SWPC](https://www.spaceweather.gov/),
+[KC2G](https://prop.kc2g.com/hfprop/planner) ([acknowledgments](https://prop.kc2g.com/acknowledgments/)),
+[NOAA D-RAP](https://www.spaceweather.gov/products/d-region-absorption-predictions-d-rap),
+[HamClock.com](https://www.hamclock.com/credits.html) ([terms](https://www.hamclock.com/terms.html)),
+[HamClock backend protocol](https://github.com/openhamclock/hamclock-standards),
+[PSK Reporter developer documentation](https://pskreporter.info/pskdev.html),
+[AD1C Country Files](https://www.country-files.com/cty/cty.dat) and the
+[VOACAP regional-location catalogue](https://www.voacap.com/hf/).
+Destination facts were retrieved November 8, 2026 UTC. No third-party app or
+propagation engine code is bundled.
 
 ## Maintenance and verification
 
@@ -551,3 +654,6 @@ tablet on your home network, start it with `START-WEATHER-DESK-UK-LAN.bat` (or a
 lists addresses such as `http://192.168.1.50:8766/`. There is no password, so use
 this only on a network you trust, and allow Python through Windows Firewall on
 Private networks only. `--allow-host NAME` adds an extra computer name.
+
+If you use your own installed Python 3.10+, start `START-WITH-INSTALLED-PYTHON-LAN.bat`
+instead, which does the same with that Python.

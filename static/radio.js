@@ -46,6 +46,16 @@
     CW: { bandwidth: 500, requiredSnr: 0 },
     FT8: { bandwidth: 50, requiredSnr: -3 },
   };
+  const SOLAR_IMAGES = {
+    sun: { url: "https://services.swpc.noaa.gov/images/animations/suvi/primary/195/latest.png", name: "The Sun · EUV 195 Å", link: "https://www.spaceweather.gov/products/solar-ultraviolet-imager-suvi", note: "NOAA GOES SUVI · original image time and scale" },
+    aurora: { url: "https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg", name: "Aurora · northern hemisphere", link: "https://www.spaceweather.gov/products/aurora-30-minute-forecast", note: "NOAA OVATION · short-term auroral forecast, not a visibility guarantee" },
+    corona: { url: "https://services.swpc.noaa.gov/images/animations/ccor1/latest.jpg", name: "The corona · CCOR-1", link: "https://www.spaceweather.gov/products/ccor-1-coronagraph", note: "NOAA GOES CCOR-1 · original coronagraph observation time" },
+  };
+  const QUICK_TARGETS = [["uk", "England · Midlands"], ["europe", "Central Europe"], ["west", "US West Coast"], ["japan", "Japan"], ["australia", "Eastern Australia"], ["custom", "Custom Maidenhead grid"]];
+  const severityLevel = (n) => Number.isInteger(n) && n >= 0 && n <= 5 ? String(n) : "unknown";
+  const kpLevel = (n) => !finite(n) || n < 0 || n > 9 ? "unknown" : String(n >= 9 ? 5 : n >= 8 ? 4 : n >= 7 ? 3 : n >= 6 ? 2 : n >= 5 ? 1 : 0);
+  const flareLevel = (f) => !finite(f) || f < 0 ? "unknown" : String(f >= 2e-3 ? 5 : f >= 1e-3 ? 4 : f >= 1e-4 ? 3 : f >= 5e-5 ? 2 : f >= 1e-5 ? 1 : 0);
+  function customGridState(target) { return {required: target === "custom", disabled: target !== "custom", hidden: target !== "custom"}; }
   function grid(lat, lon) {
     if (
       !finite(lat) ||
@@ -102,6 +112,7 @@
       mag: 1200,
       wind: 1200,
       xray: 1200,
+      protons: 1200,
       wwv: 43200,
       bulletins: 900,
     };
@@ -141,18 +152,25 @@
       p = envelope?.value;
     const prefs = data?.settings,
       context = data?.context;
+    const monthly = prefs?.engine === "voacap";
+    const samePreferences = (a,b) => !!a && !!b && typeof a === "object" && typeof b === "object" &&
+      !Array.isArray(a) && !Array.isArray(b) && Object.keys(a).length === Object.keys(b).length && Object.keys(a).every(key=>a[key]===b[key]);
     const valid =
       !!p &&
       Array.isArray(p.bands) &&
       !envelope.stale &&
       !envelope.error &&
       finite(p.timestamp) &&
-      now - p.timestamp <= 10800 &&
+      now - p.timestamp <= (monthly ? 7200 : 10800) &&
       p.timestamp <= now + 3600 &&
       p.context?.txLat === context?.txLat &&
       p.context?.txLon === context?.txLon &&
+      p.context?.rxLat === context?.rxLat &&
+      p.context?.rxLon === context?.rxLon &&
+      p.context?.provider === context?.provider &&
       p.context?.destination === context?.destination &&
-      JSON.stringify(p.context?.preferences) === JSON.stringify(prefs);
+      samePreferences(p.context?.preferences, prefs) &&
+      (p.model || "kc2g") === (prefs?.engine || "kc2g");
     if (!valid)
       return {
         valid: false,
@@ -161,10 +179,10 @@
         highest: null,
         best: null,
       };
-    const modelStart = Math.ceil(p.timestamp / 3600) * 3600;
-    const time = Math.max(Math.floor(now / 3600) * 3600, modelStart),
+    const modelStart = (monthly ? Math.floor : Math.ceil)(p.timestamp / 3600) * 3600;
+    const time = monthly ? Math.floor(now / 3600) * 3600 : Math.max(Math.floor(now / 3600) * 3600, modelStart),
       hour = new Date(time * 1000).getUTCHours();
-    const count = Math.max(
+    const count = monthly ? 24 : Math.max(
       0,
       Math.min(24, Math.floor((modelStart + 86400 - time) / 3600)),
     );
@@ -194,6 +212,7 @@
       time,
       hour,
       count,
+      monthly,
     };
   }
   function futureKp(data, now = Date.now() / 1000) {
@@ -238,7 +257,7 @@
         : "Time unavailable";
     const local = (t, options) =>
       new Intl.DateTimeFormat("en-US", {
-        timeZone: getSettings()?.timezone || "America/New_York",
+        timeZone: getSettings()?.timezone || "Europe/London",
         ...options,
       }).format(new Date(t));
     let data = null,
@@ -249,6 +268,7 @@
       map = "muf",
       mapKey = "",
       identity = "";
+    let catalog = null, solarImage = "sun", solarKey = "", trend = "xray";
     const locationIdentity = () =>
       `${getSettings()?.latitude}|${getSettings()?.longitude}`;
     function metric(id, value, s, detail) {
@@ -348,9 +368,73 @@
       };
       img.src = definition.url + "?weatherdesk=" + key.split("|")[1];
     }
+    function refreshSolar() {
+      if (!isVisible()) return;
+      const key = `${solarImage}|${Math.floor(Date.now() / 300000)}`;
+      if (key === solarKey) return;
+      solarKey = key;
+      const image = $("radioSolarImage"), definition = SOLAR_IMAGES[solarImage];
+      image.hidden = true; $("radioSolarPlaceholder").hidden = false;
+      put("radioSolarPlaceholder", "Loading NOAA imagery…");
+      put("radioSolarTitle", definition.name); put("radioSolarNote", definition.note);
+      $("radioSolarLink").href = definition.link;
+      for (const name of Object.keys(SOLAR_IMAGES)) {
+        $("radioSolar" + name).classList.toggle("active", name === solarImage);
+        $("radioSolar" + name).setAttribute("aria-pressed", String(name === solarImage));
+      }
+      image.onload = () => {
+        if (key !== solarKey) return;
+        image.hidden = false; $("radioSolarPlaceholder").hidden = true;
+        put("radioSolarNote", `${definition.note} · image loaded ${utc(Date.now()/1000)}; use the valid time on the image`);
+      };
+      image.onerror = () => {
+        if (key !== solarKey) return;
+        image.hidden = true; $("radioSolarPlaceholder").hidden = false;
+        put("radioSolarPlaceholder", "NOAA imagery is unavailable. Open the official product, or wait for the next five-minute check.");
+        put("radioSolarNote", "Image unavailable · automatic check every five minutes");
+      };
+      image.src = definition.url + "?weatherdesk=" + key.split("|")[1];
+    }
+    function renderTrend() {
+      const names = {xray:"GOES X-ray flux · 6 hours",proton:"GOES proton flux · 6 hours",kp:"Planetary Kp · past 24 hours"};
+      const links = {xray:"goes-x-ray-flux",proton:"goes-proton-flux",kp:"planetary-k-index"};
+      put("radioTrendTitle", names[trend]); $("radioTrendLink").href = "https://www.spaceweather.gov/products/" + links[trend];
+      for (const name of Object.keys(names)) {
+        $("radioTrend"+name).classList.toggle("active",name===trend);
+        $("radioTrend"+name).setAttribute("aria-pressed",String(name===trend));
+      }
+      const feed = source(data, trend === "proton" ? "protons" : trend);
+      const note = globalThis.WeatherRadioPlots?.render($("radioTrendPlot"), trend, feed);
+      put("radioTrendNote", note || "Loading NOAA measurements…");
+    }
+    function renderReports() {
+      const feed = data?.reports, value = feed?.value, body = $("radioReportsRows");
+      body.replaceChildren();
+      const reports = (value?.reports || []).filter(r => r.timestamp >= Date.now()/1000-3600 && r.timestamp <= Date.now()/1000+120);
+      put("radioReportsSummary", !feed?.configured ? "Add a callsign in Path setup." : !value ? `${feed.callsign} · ${feed.error ? "reports unavailable" : "waiting for reports"}` : `${feed.callsign} · ${new Set(reports.map(r=>r.receiver)).size} ${feed.stale ? "receivers in saved results" : "reporting receivers"}`);
+      $("radioReportsLink").href = "https://pskreporter.info/pskmap.html" + (feed?.callsign ? "?callsign="+encodeURIComponent(feed.callsign)+"&search=Find&timerange=3600" : "");
+      put("radioReportsState", !feed?.configured ? "Actual digital reception reports · last hour" :
+        feed.loading && !value ? "Checking PSK Reporter…" : feed.error ? feed.error :
+        !value ? "Waiting for the next permitted PSK Reporter check (at least five minutes between queries)." :
+        `${feed.stale ? "Saved results · " : ""}Queried ${utc(value.timestamp,true)} · ${value.limited ? "latest 100 reports only" : "last hour"}${reports.length ? "" : " · no matching reports returned"}`);
+      for (const report of reports.slice(0,5)) {
+        const tr = document.createElement("tr");
+        for (const text of [report.receiver, `${report.band} ${report.mode}`, utc(report.timestamp).replace(" UTC", "")]) {
+          const td = document.createElement("td"); td.textContent = text; tr.append(td);
+        }
+        tr.title = `${report.locator || "Locator unavailable"} · ${(report.frequency/1e6).toFixed(5)} MHz${finite(report.snr) ? ` · reported SNR ${report.snr} dB` : ""}`;
+        body.append(tr);
+      }
+    }
     function table() {
       const p = pathModel(data),
         body = $("radioBandRows");
+      const voacap = data?.settings?.engine === "voacap";
+      for (const engine of ["kc2g", "voacap"]) {
+        $("radioEngine"+engine).classList.toggle("active", (voacap ? "voacap" : "kc2g") === engine);
+        $("radioEngine"+engine).setAttribute("aria-pressed",String((voacap ? "voacap" : "kc2g")===engine));
+      }
+      put("radioModelLabel", voacap ? "VOACAP · MONTHLY PATH PLANNING" : "KC2G · REAL-TIME IONOSPHERE");
       body.replaceChildren();
       for (const [id, offset] of [
         ["radioPathColumn", 0],
@@ -367,7 +451,7 @@
         );
       put(
         "radioSnrHeading",
-        `SNR · ${MODES[data?.settings?.mode]?.bandwidth || 3000} Hz`,
+        voacap ? "SNR · N/A" : `SNR · ${MODES[data?.settings?.mode]?.bandwidth || 3000} Hz`,
       );
       for (const band of BANDS) {
         const row = p.rows.find((r) => r.band === band);
@@ -382,14 +466,14 @@
           td.textContent = finite(cell?.bcr) ? fmt(cell.bcr, 0) + "%" : "—";
           td.dataset.rating = category(cell?.bcr);
           td.title = cell
-            ? `${utc(p.time + offset * 3600, true)} · KC2G modelled circuit reliability for your selected path and station settings.`
-            : "Forecast unavailable for this hour.";
+            ? `${utc(p.time + offset * 3600, true)} · ${voacap ? "VOACAP monthly" : "KC2G"} modelled circuit reliability. Green ≥75%; amber 50–74%; red <50%.`
+            : voacap && band === "160m" ? "160m is not supplied by this VOACAP backend." : "Forecast unavailable for this hour.";
           tr.append(td);
         }
         const snr = document.createElement("td");
         snr.textContent = finite(row?.snr) ? `${fmt(row.snr)} dB` : "—";
         snr.title =
-          "Predicted signal power minus noise power in the selected mode bandwidth.";
+          voacap ? "SNR is not supplied by this VOACAP backend." : "Predicted signal power minus noise power in the selected mode bandwidth.";
         tr.append(snr);
         body.append(tr);
       }
@@ -419,19 +503,22 @@
       put(
         "radioAssumptions",
         settings
-          ? `${settings.mode} · ${fmt(settings.power, 0)} W · idealised ${fmt(settings.txGain, 0)}/${fmt(settings.rxGain, 0)} dBi antennas · ${settings.noise.toLowerCase()} noise`
+          ? voacap ? `${settings.mode} · ${fmt(settings.power, 1)} W · 0 dBi isotropic model antennas · minimum takeoff angle 3° · backend noise assumptions` : `${settings.mode} · ${fmt(settings.power, 0)} W · idealised ${fmt(settings.txGain, 0)}/${fmt(settings.rxGain, 0)} dBi antennas · ${settings.noise.toLowerCase()} noise`
           : "Choose the path and station assumptions.",
       );
       put(
         "radioPathStamp",
         p.valid
-          ? `Model ${utc(data.path.value.timestamp, true)} · values for ${utc(p.time, true)}`
+          ? voacap ? `Monthly planning · ${data.path.value.modelMonth} · model SSN ${fmt(data.path.value.sunspotNumber,0)} · calculated ${utc(data.path.value.timestamp,true)}` : `Model ${utc(data.path.value.timestamp, true)} · values for ${utc(p.time, true)}`
           : data?.path?.loading
             ? "Calculating the selected path…"
             : data?.path?.error
-              ? "Path source unavailable. NOAA conditions are checked independently."
+              ? data.path.error
               : "Waiting for the selected path.",
       );
+      $("radioPathStamp").dataset.error = String(!p.valid && !!data?.path?.error);
+      put("radioModelNotes", voacap ? `VOACAP via ${data?.path?.value?.sourceProvider || "HamClock-compatible service"} · typical monthly circuit reliability, not a live opening report. 80–10m including 60m; 160m and SNR are not supplied. Gain/noise controls apply to KC2G. Lowest usable band means the lowest tested band ≥50%, not a full continuous LUF.` : "KC2G / ITU-R HF · current ionospheric model, idealised fixed-gain antennas. Green ≥75%, amber 50–74%, red <50% reliability; grey is unavailable. SNR is modelled in your selected mode bandwidth. Lowest usable band is not a full continuous LUF.");
+      put("radioQuickNote", voacap ? "Monthly planning · 160m and SNR are not supplied by this backend." : "Modelled reliability · SNR for the selected UTC hour");
       $("radioForecastBtn").disabled = !p.valid;
     }
     function render() {
@@ -501,26 +588,25 @@
         x,
         "NOAA GOES · 0.1–0.8 nm",
       );
+      for (const [id, level, stale] of [["radioKp", kpLevel(k.value?.current?.kp), k.stale], ["radioGeomag", severityLevel(s.value?.levels?.G), s.stale], ["radioXray", flareLevel(x.value?.flux), x.stale]])
+        $(id).closest(".radio-metric").dataset.level = stale ? "unknown" : level;
       for (const code of ["R", "S", "G"]) {
         const n = s.value?.levels?.[code];
         put(
           "radioScale" + code,
           s.stale || !finite(n) ? `${code} —` : `${code}${fmt(n, 0)}`,
         );
-        $("radioScale" + code).dataset.severity =
-          s.stale || !finite(n)
-            ? "unknown"
-            : n >= 3
-              ? "high"
-              : n > 0
-                ? "elevated"
-                : "quiet";
+        $("radioScale" + code).dataset.level = s.stale ? "unknown" : severityLevel(n);
+        const maximum = s.value?.maximum24h?.[code];
+        put("radioMax"+code, s.stale || !finite(maximum) ? `${code} —` : `${code}${maximum}`);
+        $("radioMax"+code).dataset.level = s.stale ? "unknown" : severityLevel(maximum);
+        $("radioScale"+code).title = `${code}: ${["radio blackout","solar radiation storm","geomagnetic storm"][["R","S","G"].indexOf(code)]} · ${s.stale ? "unavailable or saved" : ["below scale","minor","moderate","strong","severe","extreme"][n] || "unavailable"}`;
       }
       put(
         "radioScaleTime",
         s.stale
           ? "NOAA scales unavailable / saved data"
-          : `Latest observed · ${utc(s.value?.timestamp, true)}`,
+          : `Latest ${utc(s.value?.timestamp, true)} · R radio blackout · S radiation · G geomagnetic`,
       );
       const kp = futureKp(data),
         target = $("radioKpBars");
@@ -530,8 +616,7 @@
           fill = document.createElement("i"),
           label = document.createElement("span");
         fill.style.height = 6 + point.kp * 4 + "px";
-        fill.dataset.level =
-          point.kp >= 5 ? "storm" : point.kp >= 4 ? "active" : "quiet";
+        fill.dataset.level = kpLevel(point.kp);
         label.textContent = utc(point.timestamp).slice(0, 2) + "Z";
         bar.title = `${utc(point.timestamp, true)} · predicted Kp ${fmt(point.kp, 2)}`;
         const number = document.createElement("b");
@@ -542,7 +627,7 @@
       put(
         "radioKpPeak",
         kp.length
-          ? `Next 24h peak Kp ${fmt(Math.max(...kp.map((p) => p.kp)), 2)}`
+          ? `Forecast peak Kp ${fmt(Math.max(...kp.map((p) => p.kp)), 2)}${kp.length < 7 ? " · partial" : " · next 24h"}`
           : "Kp outlook unavailable",
       );
       const bullet = source(data, "bulletins");
@@ -554,11 +639,12 @@
           : `${count || 0} bulletin${count === 1 ? "" : "s"} issued in the last 48 hours`,
       );
       const outlook = !s.stale ? s.value?.outlook?.[0] : null;
+      put("radioOutlookDate", outlook?.date ? `NOAA forecast · ${outlook.date} UTC` : "NOAA forecast unavailable");
+      put("radioForecastG", finite(outlook?.g) ? `G${outlook.g}` : "G —");
+      $("radioForecastG").dataset.level = severityLevel(outlook?.g);
       put(
         "radioBlackoutOutlook",
-        finite(outlook?.minorBlackout)
-          ? `NOAA outlook · R1–R2 ${fmt(outlook.minorBlackout, 0)}% · R3–R5 ${fmt(outlook.majorBlackout, 0)}%`
-          : "Radio-blackout outlook unavailable",
+        outlook ? `R1–R2 ${fmt(outlook.minorBlackout,0)}% · R3–R5 ${fmt(outlook.majorBlackout,0)}%\nS1 or greater ${fmt(outlook.radiation,0)}%` : "Forecast probabilities unavailable",
       );
       put(
         "radioDensity",
@@ -583,6 +669,8 @@
             : "Feed checks complete · observation times in tooltips",
       );
       table();
+      renderReports();
+      renderTrend();
     }
     async function refresh(token = revision) {
       if (!isVisible() || token !== revision) return;
@@ -594,6 +682,7 @@
         data = value;
         render();
         refreshMap();
+        refreshSolar();
         timer = setTimeout(() => refresh(token), value.loading ? 2000 : 60000);
       } catch (error) {
         if (token !== revision) return;
@@ -601,13 +690,45 @@
         if (data) {
           for (const s of Object.values(data.sources || {})) s.stale = true;
           if (data.path) data.path.stale = true;
+          if (data.reports) data.reports.stale = true;
           render();
           put("radioStatus", error.message);
         }
         timer = setTimeout(() => refresh(token), 60000);
       }
     }
-    function showSetup() {
+    function syncSetupFields() {
+      const form = $("radioSettingsForm"), state = customGridState(form.elements.target.value);
+      $("radioCustomGridField").hidden = state.hidden;
+      form.elements.customGrid.required = state.required;
+      form.elements.customGrid.disabled = state.disabled;
+      const voacap = form.elements.engine.value === "voacap";
+      form.elements.power.min = voacap ? "1" : "0.1";
+      form.elements.power.step = voacap ? "1" : "any";
+      for (const key of ["txGain", "rxGain", "noise"]) form.elements[key].disabled = voacap;
+    }
+    function populateDestinations() {
+      if (!catalog) return;
+      const select = $("radioDestinationSelect"), selected = select.value,
+        filter = $("radioDestinationSearch").value.trim().toLocaleLowerCase();
+      select.replaceChildren();
+      const groups = [["Quick choices",QUICK_TARGETS.map(([id,name])=>({id,name}))], ["DXCC entities · representative locations",catalog.entities], ["Regional cities · VOACAP location catalogue",catalog.cities]];
+      let count = 0;
+      for (const [title, items] of groups) {
+        const group = document.createElement("optgroup"); group.label = title;
+        for (const item of items || []) {
+          const label = `${item.name}${item.entityName && item.entityName !== item.name ? " — "+item.entityName : ""}${item.prefix ? " · "+item.prefix : ""}`;
+          if (filter && !label.toLocaleLowerCase().includes(filter) && item.id !== selected) continue;
+          const option = document.createElement("option"); option.value = item.id; option.textContent = label;
+          option.selected = item.id === selected; group.append(option); count++;
+        }
+        if (group.children.length) select.append(group);
+      }
+      if (selected) select.value = selected;
+      put("radioDestinationNote", `${count} choices shown. No grid needed for listed locations. DXCC entries use representative points; choose a city for a more specific path.`);
+      syncSetupFields();
+    }
+    async function showSetup() {
       const form = $("radioSettingsForm"),
         prefs = data?.settings || {
           target: "uk",
@@ -617,11 +738,50 @@
           txGain: 0,
           rxGain: 0,
           noise: "RESIDENTIAL",
+          engine: "kc2g",
+          reportCallsign: "",
         };
+      const select = form.elements.target;
+      if (![...select.options].some(o=>o.value===prefs.target)) {
+        const option = document.createElement("option"); option.value=prefs.target; option.textContent=data?.context?.destination || prefs.target; select.append(option);
+      }
       for (const [key, value] of Object.entries(prefs))
         if (form.elements[key]) form.elements[key].value = value;
       put("radioSettingsStatus", "");
+      $("radioDestinationSearch").value = "";
+      syncSetupFields();
       $("radioSettingsDialog").showModal();
+      if (!catalog) {
+        try { catalog = await api("/api/radio/destinations"); }
+        catch { put("radioDestinationNote", "Full destination list unavailable. Saved and quick destinations remain available; reopen setup to retry."); }
+      }
+      if (catalog) populateDestinations();
+    }
+    async function chooseEngine(engine) {
+      if (engine === (data?.settings?.engine || "kc2g")) return;
+      const token = ++revision; clearTimeout(timer);
+      try {
+        await api("/api/radio/settings", {engine});
+        if (token !== revision) return;
+        data=null; table(); put("radioStatus", "Calculating with the selected model…");
+        await refresh(token);
+      } catch(error) { if (token === revision) { put("radioStatus", error.message || "The prediction model could not change."); timer=setTimeout(()=>refresh(revision),60000); } }
+    }
+    function showVoacap() {
+      const c=data?.context, s=data?.settings;
+      if (!c || !s) { put("radioStatus", "Set your station and path first."); return; }
+      const tx=grid(c.txLat,c.txLon), rx=grid(c.rxLat,c.rxLon);
+      put("radioVoacapTxGrid",tx); put("radioVoacapRxGrid",rx);
+      put("radioVoacapTxCoords",`${c.txLat.toFixed(2)}, ${c.txLon.toFixed(2)}`);
+      put("radioVoacapRxCoords",`${c.destination} · ${c.rxLat.toFixed(2)}, ${c.rxLon.toFixed(2)}`);
+      put("radioVoacapSettings",`${s.mode} · ${s.power} W · short path. Match antenna, noise and takeoff-angle settings in the calculator.`);
+      $("radioVoacapPath").value=`TX: ${tx} (${c.txLat}, ${c.txLon})\nRX: ${rx} (${c.rxLat}, ${c.rxLon}) — ${c.destination}\n${s.mode}; ${s.power} W; short path\nKC2G gains ${s.txGain}/${s.rxGain} dBi; ${s.noise.toLowerCase()} noise\nDashboard VOACAP model: 0 dBi isotropes; minimum takeoff angle 3°`;
+      put("radioVoacapCopyStatus", ""); $("radioVoacapDialog").showModal();
+    }
+    async function copyPath(which) {
+      const value=which==="all" ? $("radioVoacapPath").value : $(which==="tx" ? "radioVoacapTxGrid" : "radioVoacapRxGrid").textContent;
+      try { await navigator.clipboard.writeText(value); put("radioVoacapCopyStatus", "Copied."); }
+      catch { $("radioVoacapPath").focus(); $("radioVoacapPath").select(); put("radioVoacapCopyStatus", "Select and copy the path text above."); }
     }
     async function saveSetup(event) {
       event.preventDefault();
@@ -680,7 +840,7 @@
       table.append(body);
       put(
         "radioForecastNote",
-        `${data.context.destination} · ${data.settings.mode} · ${data.settings.power} W · ${p.count} hourly predictions from ${utc(p.time, true)}. Percentage = circuit reliability; hover for SNR in the selected mode bandwidth.`,
+        `${data.context.destination} · ${data.settings.mode} · ${data.settings.power} W · ${p.count} UTC hours from ${utc(p.time, true)}. ${p.monthly ? "VOACAP typical monthly planning probabilities, not a live opening forecast. This backend does not supply 160m or SNR." : "KC2G circuit reliability; hover for modelled SNR in the selected mode bandwidth."}`,
       );
       $("radioForecastDialog").showModal();
     }
@@ -733,6 +893,7 @@
       revision++;
       clock();
       refreshMap();
+      refreshSolar();
       if (data) render();
       refresh(revision);
       clearInterval(clockTimer);
@@ -754,7 +915,19 @@
       $("radioRefreshBtn").addEventListener("click", () => {
         refresh(revision);
         refreshMap();
+        refreshSolar();
       });
+      for (const name of Object.keys(SOLAR_IMAGES)) $("radioSolar"+name).addEventListener("click",()=>{solarImage=name;refreshSolar();});
+      for (const name of ["xray","proton","kp"]) $("radioTrend"+name).addEventListener("click",()=>{trend=name;renderTrend();});
+      for (const engine of ["kc2g","voacap"]) $("radioEngine"+engine).addEventListener("click",()=>chooseEngine(engine));
+      $("radioSettingsForm").elements.target.addEventListener("change",syncSetupFields);
+      $("radioSettingsForm").elements.engine.addEventListener("change",syncSetupFields);
+      $("radioDestinationSearch").addEventListener("input",populateDestinations);
+      $("radioDestinationSearch").addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();$("radioDestinationSelect").focus();}});
+      $("radioVoacapBtn").addEventListener("click",showVoacap);
+      $("radioCopyVoacapPath").addEventListener("click",()=>copyPath("all"));
+      $("radioCopyTxGrid").addEventListener("click",()=>copyPath("tx"));
+      $("radioCopyRxGrid").addEventListener("click",()=>copyPath("rx"));
       $("radioSetupBtn").addEventListener("click", showSetup);
       $("radioSettingsForm").addEventListener("submit", saveSetup);
       $("radioForecastBtn").addEventListener("click", showForecast);
@@ -763,6 +936,7 @@
         if (!document.hidden && isVisible()) {
           clock();
           refreshMap();
+          refreshSolar();
           refresh(revision);
         }
       });
@@ -773,6 +947,11 @@
     BANDS,
     MAPS,
     MODES,
+    SOLAR_IMAGES,
+    severityLevel,
+    kpLevel,
+    flareLevel,
+    customGridState,
     grid,
     xrayClass,
     category,

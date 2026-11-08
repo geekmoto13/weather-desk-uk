@@ -17,6 +17,10 @@ from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 from local_store import write_private_json
+from radio_reports import ReceptionReports, callsign, default_callsign
+import radio_voacap
+
+DESTINATION_CATALOG = json.loads((Path(__file__).parent / "data/radio-destinations.json").read_text("utf-8"))
 
 UTC = dt.timezone.utc
 NOAA = "https://services.swpc.noaa.gov/"
@@ -30,6 +34,8 @@ TARGETS = {
     "australia": ("Eastern Australia", -33.86, 151.21),
     "custom": ("Custom grid", None, None),
 }
+TARGETS.update({d["id"]: (d["name"] + " · " + d["prefix"], d["latitude"], d["longitude"])
+                for d in DESTINATION_CATALOG["entities"] + DESTINATION_CATALOG["cities"]})
 MODES = {
     "SSB": {"bandwidth": 3000, "requiredSnr": 6},
     "CW": {"bandwidth": 500, "requiredSnr": 0},
@@ -43,6 +49,8 @@ DEFAULT_RADIO = {
     "txGain": 0,
     "rxGain": 0,
     "noise": "RESIDENTIAL",
+    "reportCallsign": "",
+    "engine": "kc2g",
 }
 
 
@@ -137,6 +145,12 @@ def scales(raw, now):
         )
     if ts is None or all(v is None for v in result["levels"].values()):
         raise ValueError("Incomplete NOAA scales")
+    maximum = raw.get("-1", {})
+    result["maximum24h"] = {
+        code: numeric(maximum.get(code, {}).get("Scale"), 0, 5)
+        if isinstance(maximum.get(code), dict) else None
+        for code in ("R", "S", "G")
+    }
     result["outlook"] = []
     for key in ("1", "2", "3"):
         row = raw.get(key, {})
@@ -222,17 +236,39 @@ def xray(raw, now):
     if not isinstance(rows, list):
         raise ValueError("Invalid X-ray feed")
     good = []
+    series = {"long": [], "short": []}
     for row in rows:
-        if not isinstance(row, dict) or row.get("energy") != "0.1-0.8nm":
+        if not isinstance(row, dict) or row.get("energy") not in ("0.1-0.8nm", "0.05-0.4nm"):
             continue
         if row.get("electron_contaminaton") is True or row.get("electron_contamination") is True:
             continue
         ts, value = stamp(row.get("time_tag")), numeric(row.get("flux"), 0, 1)
         if ts is not None and ts <= now + 300 and value is not None:
-            good.append({"timestamp": ts, "flux": value})
+            if row["energy"] == "0.1-0.8nm":
+                good.append({"timestamp": ts, "flux": value})
+            if now - 21600 <= ts <= now:
+                series["long" if row["energy"] == "0.1-0.8nm" else "short"].append({"timestamp": ts, "value": value})
     if not good:
         raise ValueError("No long-wave X-ray observations")
-    return max(good, key=lambda p: p["timestamp"])
+    return {**max(good, key=lambda p: p["timestamp"]), "series": series}
+
+
+def protons(raw, now):
+    rows = as_json(raw)
+    if not isinstance(rows, list):
+        raise ValueError("Unreadable NOAA proton flux data.")
+    series = {"10": [], "50": [], "100": []}
+    for row in rows:
+        if not isinstance(row, dict): continue
+        energy = str(row.get("energy", ""))
+        match = re.fullmatch(r">=?\s*(10|50|100)\s*MeV", energy)
+        if not match: continue
+        ts, flux = stamp(row.get("time_tag")), numeric(row.get("flux"), 0, 1e9)
+        if ts is not None and now - 21600 <= ts <= now + 120 and flux is not None:
+            series[match[1]].append({"timestamp":ts,"value":flux})
+    if not series["10"]:
+        raise ValueError("No current NOAA ≥10 MeV proton measurements.")
+    return {"timestamp":max(p["timestamp"] for p in series["10"]),"series":series}
 
 
 def wwv(raw, now):
@@ -330,7 +366,16 @@ def clean_preferences(values):
     ):
         raise ValueError("Choose a listed destination and mode.")
     result["customGrid"] = str(result["customGrid"]).strip().upper()
-    grid_location(result["customGrid"])
+    if result["target"] == "custom":
+        grid_location(result["customGrid"])
+    elif not re.fullmatch(r"[A-R]{2}\d{2}(?:[A-X]{2}(?:\d{2})?)?", result["customGrid"]):
+        result["customGrid"] = ""
+    supplied_call = str(result["reportCallsign"] or "").strip()
+    result["reportCallsign"] = callsign(supplied_call)
+    if supplied_call and not result["reportCallsign"]:
+        raise ValueError("Enter one callsign for PSK Reporter, or leave it blank to use your station callsign.")
+    if result["engine"] not in ("kc2g", "voacap"):
+        raise ValueError("Choose the KC2G or VOACAP prediction model.")
     if result["noise"] not in ("CITY", "RESIDENTIAL", "RURAL", "QUIETRURAL", "QUIET", "NOISY"):
         raise ValueError("Choose a listed noise environment.")
     for key, low, high in (("power", 0.1, 1500), ("txGain", -20, 20), ("rxGain", -20, 20)):
@@ -338,6 +383,8 @@ def clean_preferences(values):
         if n is None:
             raise ValueError("Use 0.1–1500 W and antenna gains between −20 and +20 dBi.")
         result[key] = n
+    if result["engine"] == "voacap" and (result["power"] < 1 or not result["power"].is_integer()):
+        raise ValueError("VOACAP needs whole-watt transmit power (1–1500 W). KC2G supports fractional watts.")
     return result
 
 
@@ -352,7 +399,7 @@ def path_context(weather, prefs):
         rxlat, rxlon = grid_location(prefs["customGrid"])
         name = prefs["customGrid"]
     # A propagation calculation needs an approximate location, not home-level precision.
-    return {
+    context = {
         "txLat": round(lat, 2),
         "txLon": round(lon, 2),
         "rxLat": rxlat,
@@ -360,6 +407,14 @@ def path_context(weather, prefs):
         "destination": name,
         "preferences": copy.deepcopy(prefs),
     }
+    if prefs.get("engine") == "voacap":
+        try:
+            context["provider"] = radio_voacap.endpoint()
+        except ValueError:
+            # Report a bad optional endpoint inside its own feed; NOAA and
+            # reception observations must remain available independently.
+            context["provider"] = "invalid-voacap-configuration"
+    return context
 
 
 def parse_path(raw, model_time, context):
@@ -376,10 +431,12 @@ def parse_path(raw, model_time, context):
         if not isinstance(band, list) or len(band) < 2 or band[0] not in BANDS or band[0] in seen:
             continue
         frequency = numeric(band[1], 1, 35)
-        if frequency is None or not isinstance(values, list) or len(values) != 24:
+        # The live planner includes a 25th column. The table's 24 UTC hour
+        # positions are the first 24 columns; do not discard a valid band.
+        if frequency is None or not isinstance(values, list) or len(values) not in (24, 25):
             continue
         cells = []
-        for cell in values:
+        for cell in values[:24]:
             cell = cell if isinstance(cell, dict) else {}
             pr, noise = numeric(cell.get("pr"), -400, 100), numeric(cell.get("noise"), -300, 100)
             cells.append(
@@ -398,6 +455,7 @@ def parse_path(raw, model_time, context):
         "bands": rows,
         "context": context,
         "method": "KC2G / ITU-R HF · idealised fixed-gain antennas",
+        "model": "kc2g",
     }
 
 
@@ -472,9 +530,13 @@ class PublicFeed:
                 write_private_json(self.path, {"schema": 1, "fetchedAt": now, "value": value})
             except OSError:
                 pass
-        except Exception:
+        except Exception as exc:
             with self.lock:
-                self.error = "Source unavailable; any displayed values are saved data."
+                detail = str(exc) if isinstance(exc, ValueError) else (
+                    f"Public feed returned HTTP {exc.code}" if hasattr(exc, "code") else
+                    "The public service did not answer."
+                )
+                self.error = "Source unavailable: " + detail + " Any displayed values are saved data."
                 self.next_attempt = time.time() + self.retry
 
 
@@ -485,6 +547,7 @@ class RadioDesk:
         self.fetch = fetch
         self.lock = threading.RLock()
         self.prefs = clean_preferences(DEFAULT_RADIO)
+        self.reports = ReceptionReports(self.directory, fetch)
         self.paths = {}
         self.preferences_path = self.directory / "preferences.json"
         try:
@@ -513,6 +576,7 @@ class RadioDesk:
                 20 * 60,
             ),
             "xray": (NOAA + "json/goes/primary/xrays-6-hour.json", xray, 300, 20 * 60),
+            "protons": (NOAA + "json/goes/primary/integral-protons-6-hour.json", protons, 300, 20 * 60),
             "wwv": (NOAA + "text/wwv.txt", wwv, 1800, 12 * 3600),
             "bulletins": (NOAA + "products/alerts.json", bulletins, 300, 15 * 60),
         }
@@ -528,8 +592,14 @@ class RadioDesk:
             self.prefs = prefs
         return {"settings": copy.deepcopy(prefs)}
 
+    def destinations(self):
+        return copy.deepcopy(DESTINATION_CATALOG)
+
     def _path(self, context, now):
         prefs = context["preferences"]
+        if prefs["engine"] == "voacap":
+            url = radio_voacap.endpoint()
+            return radio_voacap.parse(self.fetch(radio_voacap.request_url(context, now, url)), now, context, url)
         mode = MODES[prefs["mode"]]
         first = as_json(self.fetch(KC2G + "api/latest_hourly.json"))
         model_time = numeric(first.get("target_time")) if isinstance(first, dict) else None
@@ -553,6 +623,10 @@ class RadioDesk:
         last = as_json(self.fetch(KC2G + "api/latest_hourly.json"))
         if first.get("run_id") is None or first.get("run_id") != last.get("run_id"):
             raise ValueError("Model changed during calculation")
+        returned = as_json(raw)
+        info = returned.get("run_info") if isinstance(returned, dict) else None
+        if isinstance(info, dict) and info.get("run_id") != first["run_id"]:
+            raise ValueError("HF model generation changed during calculation. Retrying shortly.")
         result = parse_path(raw, model_time, context)
         result["runId"] = first["run_id"]
         result["fetchedAt"] = now
@@ -563,12 +637,13 @@ class RadioDesk:
             context = path_context(weather, self.prefs)
             key = hashlib.sha256(json.dumps(context, sort_keys=True).encode()).hexdigest()[:20]
             if key not in self.paths:
+                voacap = self.prefs["engine"] == "voacap"
                 self.paths[key] = PublicFeed(
                     self.directory,
                     "path-" + key,
                     lambda now: self._path(context, now),
-                    900,
-                    3 * 3600,
+                    3600 if voacap else 900,
+                    2 * 3600 if voacap else 3 * 3600,
                     future_tolerance=3600,
                 )
                 if len(self.paths) > 8:
@@ -580,11 +655,13 @@ class RadioDesk:
                 path["stale"] = True
             settings = copy.deepcopy(self.prefs)
         sources = {name: feed.get() for name, feed in self.feeds.items()}
+        reports = self.reports.snapshot(settings["reportCallsign"] or default_callsign(weather.get("callsign")))
         return {
             "settings": settings,
             "context": context,
             "sources": sources,
             "path": path,
-            "loading": path["loading"] or any(s["loading"] for s in sources.values()),
+            "reports": reports,
+            "loading": path["loading"] or reports["loading"] or any(s["loading"] for s in sources.values()),
             "serverTime": time.time(),
         }

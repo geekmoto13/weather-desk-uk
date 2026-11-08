@@ -11,7 +11,7 @@ test('the dry reply uses Shannon’s exact Radio Ham phrase',()=>{
 });
 test('rain, snow, nearby showers and unknown precipitation have separate replies',()=>{
   for(const key of ['rain','wintry','nearby','unknown'])assert.equal(describe(sample(key),at).key,key);
-  assert.match(describe(sample('rain'),at).short,/Water wet… ew nasty/);
+  assert.match(describe(sample('rain'),at).short,/Water wet… ew, nasty!/);
 });
 test('stale, future, missing and failed reports never use the dry phrase',()=>{
   assert.equal(describe(sample(),at+5400001).key,'stale');
@@ -35,7 +35,7 @@ test('the compact line opens an accessible Tokyo report with Japan time',async()
   await h.controller.refresh();
   assert.match(h.elements.tokyoObserved.textContent,/12:00 JST/);
   assert.match(h.elements.tokyoTemperature.textContent,/23.0 °C \/ 73.4 °F/);
-  assert.match(h.elements.tokyoCallBtn.attrs['aria-label'],/Water wet… ew nasty/);
+  assert.match(h.elements.tokyoCallBtn.attrs['aria-label'],/Water wet… ew, nasty!/);
   h.elements.tokyoCallBtn.events.click();assert.equal(h.elements.tokyoDialog.open,true);
   h.elements.tokyoCloseBtn.events.click();assert.equal(h.elements.tokyoDialog.open,false);
 });

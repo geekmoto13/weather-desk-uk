@@ -20,6 +20,7 @@ from urllib.parse import urlencode
 from local_store import write_private_json
 from timezones import local_date, midnight, _british_changes
 from uk_sources import Cache
+from forecast_values import numeric, temperature_f
 from weather_location import distance_km
 from rain_since import interval_rain_since
 
@@ -493,8 +494,11 @@ def parse_forecast(raw, now):
         if not isinstance(summary, str) or not summary.strip():
             raise ValueError("Met Éireann forecast has no weather description.")
         # Met Éireann documents each symbol as the preceding hour's weather.
-        if now < end <= now + 90000:
-            periods.append({"start": end - 3600, "end": end, "summary": summary, "pop": None})
+        if now < end and end - 3600 < now + 49 * 3600:
+            speed = numeric(item.get("wind-speed"), 0, 500)
+            periods.append({"start": end - 3600, "end": end, "summary": summary, "pop": None,
+                            "tempF": temperature_f(item.get("temperature"), "C"),
+                            "windMph": speed / 1.609344 if speed is not None else None})
     if not periods:
         raise ValueError("No recent Met Éireann point forecast was available.")
     return periods

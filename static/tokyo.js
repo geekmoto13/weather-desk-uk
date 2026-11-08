@@ -1,7 +1,7 @@
 (function (root) {
   "use strict";
   const labels = {
-    rain: ["Water wet… ew nasty", "Water wet… ew nasty."],
+    rain: ["Water wet… ew, nasty!", "Water wet… ew, nasty!"],
     no_rain: ["It is are not raining", "It is are not raining"],
     wintry: ["Wintry precipitation", "Tokyo reports snow or ice instead."],
     nearby: ["Showers nearby", "Precipitation nearby — not at Haneda."],

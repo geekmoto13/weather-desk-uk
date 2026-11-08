@@ -35,3 +35,6 @@
 @media (min-width: 1280px) and (max-width: 1599px) {
   .overview-panels > .rain-panel { height: auto; min-height: 280px; }
 }
+
+.tokyo-episode { margin: 0 0 20px; }
+.tokyo-episode .button { display: inline-block; font-size: 12px; line-height: 1.5; white-space: normal; }

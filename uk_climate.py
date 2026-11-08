@@ -179,6 +179,19 @@ class UKArchive:
             "normalPeriod": "1991–2020 (calculated)",
         }
 
+    def temperature_baseline(self, site):
+        """Reuse the named UK/Irish archive; never send this request to US ACIS."""
+        sid = site["id"]
+        item = self.load(sid)
+        return {
+            "meta": {"name": STATIONS[sid]["name"]},
+            "data": [
+                [day.isoformat(), fields.get("TMAX", "M"), fields.get("TMIN", "M")]
+                for day, fields in sorted(item["days"].items())
+                if 1991 <= day.year <= 2020
+            ],
+        }
+
     def query(self, url):
         params = json.loads(parse_qs(urlsplit(url).query)["params"][0])
         sid = params["sid"].split()[0]

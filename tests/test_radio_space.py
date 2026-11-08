@@ -107,7 +107,7 @@ class PathTests(unittest.TestCase):
         self.assertEqual((context['txLat'],context['txLon']),(42.47,-70.95))
         self.assertEqual(context['destination'],'IO92AA')
     def test_settings_validation_rejects_invalid_grids_parameters_and_unknown_modes(self):
-        for values in ({'power':True},{'power':0},{'power':'NaN'},{'txGain':100},{'noise':'garbage'},{'mode':'unknown'},{'mode':[]},{'target':{}},{'customGrid':'../../'},{'target':'evil-url'}):
+        for values in ({'power':True},{'power':0},{'power':'NaN'},{'txGain':100},{'noise':'garbage'},{'mode':'unknown'},{'mode':[]},{'target':{}},{'target':'custom','customGrid':'../../'},{'target':'evil-url'}):
             with self.subTest(values=values),self.assertRaises(ValueError):r.clean_preferences(values)
     def test_path_adapter_uses_public_parameters_and_detects_model_rollover(self):
         with tempfile.TemporaryDirectory() as directory:
